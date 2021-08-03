@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.example.testphotos"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "BASE_URL", '"https://api.unsplash.com/"'
+            buildConfigField "String", "CLIENT_ID", '"4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk"'
+            buildConfigField "String", "ID_OR_SLUG", '"6sMVjTLSkeQ"'
+        }
+        release {
+            buildConfigField "String", "BASE_URL", '"https://api.unsplash.com/"'
+            buildConfigField "String", "CLIENT_ID", '"4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk"'
+            buildConfigField "String", "ID_OR_SLUG", '"6sMVjTLSkeQ"'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.5.0-alpha01'
+    def room_version = "2.3.0"
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha02"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha02"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+}

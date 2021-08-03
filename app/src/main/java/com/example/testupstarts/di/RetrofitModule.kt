@@ -1,0 +1,33 @@
+package com.example.testupstarts.di
+
+import com.example.testupstarts.BuildConfig
+import com.example.testupstarts.Interceptor
+import com.example.testupstarts.repository.Api
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+class RetrofitModule{
+    private val loggingInterceptor : HttpLoggingInterceptor = HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val interceptor = Interceptor()
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(interceptor)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(40, TimeUnit.SECONDS)
+        .build()
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val apiClient : Api by lazy {
+        retrofit.create(Api::class.java)
+    }
+}

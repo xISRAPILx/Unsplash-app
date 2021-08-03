@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Test Photos</string>
+    <string name="found_text">Найдено %1$d фотографий</string>
+    <string name="likes">Понравилось %1$d</string>
+    <string name="author_insta_username">Инстаграм: %1$s</string>
+    <string name="author_username">Unsplash: %1$s</string>
+    <string name="card_desc">Название</string>
+    <string name="download">Загрузить</string>
+    <string name="photos">Категория: Природа</string>
+    <string name="snackbar_add_text">Изображение добавлено в избранное</string>
+    <string name="snackbar_delete_text">Изображение удалено из избранного</string>
+</resources>
