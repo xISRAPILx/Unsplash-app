@@ -1,5 +1,6 @@
 package com.example.testupstarts.di
 
+import com.example.testupstarts.AuthInteractor
 import com.example.testupstarts.BuildConfig
 import com.example.testupstarts.Interceptor
 import com.example.testupstarts.repository.Api
@@ -9,10 +10,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitModule{
+class RetrofitModule(authInteractor: AuthInteractor){
     private val loggingInterceptor : HttpLoggingInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
-    private val interceptor = Interceptor()
+    private val interceptor = Interceptor(authInteractor)
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)

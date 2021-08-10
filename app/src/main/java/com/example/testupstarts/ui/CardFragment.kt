@@ -19,18 +19,21 @@ class CardFragment : Fragment() {
     private lateinit var viewModel : CardViewModel
 
     companion object {
-        const val JEANS_ITEM = "jeansItem"
+        const val PHOTO_ITEM = "photoItem"
+        const val FLAG_GUEST = "guestFlag"
 
-        fun newInstance(jeans: PhotosItem): CardFragment {
+        fun newInstance(photo: PhotosItem, flag: Boolean): CardFragment {
             val bundle = Bundle().apply {
-                putParcelable(JEANS_ITEM, jeans)
+                putParcelable(PHOTO_ITEM, photo)
+                putBoolean(FLAG_GUEST, flag)
             }
             return CardFragment().apply {
                 arguments = bundle
             }
         }
     }
-    private var jeans: PhotosItem? = null
+    private var photos: PhotosItem? = null
+    private var flag: Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,12 +49,14 @@ class CardFragment : Fragment() {
             viewModelStore,
             App.instance.getAppContainer().getCardVmProvider()
         ).get(CardViewModel::class.java)
-        jeans = arguments?.getParcelable(JEANS_ITEM)
+        photos = arguments?.getParcelable(PHOTO_ITEM)
+        flag = arguments?.getBoolean(FLAG_GUEST)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        jeans?.let {
+
+        photos?.let {
             Picasso.get()
                 .load(it.imageUrlRegular)
                 .into(img_card)
@@ -59,14 +64,17 @@ class CardFragment : Fragment() {
                 context?.getString(R.string.likes, it.likes)
             card_author_username.text = context?.getString(R.string.author_username, it.authorUserName)
             card_author_insta.text = context?.getString(R.string.author_insta_username, it.instagramUsername)
+            if (flag == true) {
+                card_fav.visibility = View.GONE
+            } else { card_fav.visibility = View.VISIBLE }
             viewModel.onViewCreated(it.id, it.favorite)
             viewModel.snackbar.observe(viewLifecycleOwner, {
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             })
             viewModel.favorite.observe(viewLifecycleOwner, { card_fav.isChecked = it })
             card_fav.setOnClickListener { view ->
-                viewModel.onFavClicked(card_fav.isChecked)
-            }
+                    viewModel.onFavClicked(card_fav.isChecked, photos)
+                }
         }
         btn_back.setOnClickListener {
             (activity as? MainActivity)?.goBack()

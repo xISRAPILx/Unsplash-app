@@ -12,14 +12,13 @@ import com.example.testupstarts.repository.PhotosItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_item.view.*
 
-class JeansAdapter(private val callback: PhotosCallback) :
-    RecyclerView.Adapter<JeansAdapter.JeansViewHolder>() {
-
+class PhotosAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
+    RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder>() {
     private val photos: MutableList<PhotosItem> = mutableListOf()
 
-    inner class JeansViewHolder(private val item: View) : RecyclerView.ViewHolder(item) {
+    inner class PhotoViewHolder(private val item: View) : RecyclerView.ViewHolder(item) {
 
-        private val photosImage = item.img_item
+        private val photoImage = item.img_item
         private val author = item.author
         private val likes = item.item_likes
         private val favButton = item.item_fav_btn
@@ -29,32 +28,37 @@ class JeansAdapter(private val callback: PhotosCallback) :
                 callback.onItemClick(photos[adapterPosition])
             }
             favButton.setOnClickListener {
-                callback.onLikeClick(favButton.isChecked, photos[adapterPosition].id)
+                callback.onLikeClick(favButton.isChecked, photos[adapterPosition])
                 photos[adapterPosition].favorite = favButton.isChecked
                 notifyItemChanged(adapterPosition)
             }
         }
 
-        fun bind(photos: PhotosItem) {
+        fun bind(photo: PhotosItem) {
             Picasso.get()
-                .load(photos.imageUrlSmall)
-                .into(photosImage)
-            author.text = photos.authorUserName
-            likes.text = item.context.getString(R.string.likes, photos.likes)
-            favButton.isChecked = photos.favorite
+                .load(photo.imageUrlSmall)
+                .into(photoImage)
+            author.text = photo.authorName
+            likes.text = item.context.getString(R.string.likes, photo.likes)
+            if (flagResult) {
+                favButton.visibility = View.GONE
+            } else {
+                favButton.visibility = View.VISIBLE
+            }
+            favButton.isChecked = photo.favorite
         }
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): JeansAdapter.JeansViewHolder {
+    ): PhotosAdapter.PhotoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_item, parent, false)
 
-        return JeansViewHolder(view)
+        return PhotoViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: JeansAdapter.JeansViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PhotosAdapter.PhotoViewHolder, position: Int) {
         holder.bind(photos[position])
     }
 
@@ -62,11 +66,11 @@ class JeansAdapter(private val callback: PhotosCallback) :
         return photos.size
     }
 
-    fun setData(newJeans: List<PhotosItem>) {
-        val diffCallback = PhotosDiffCallback(photos, newJeans)
+    fun setData(newPhotos: List<PhotosItem>) {
+        val diffCallback = PhotosDiffCallback(photos, newPhotos)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         photos.clear()
-        photos.addAll(newJeans)
+        photos.addAll(newPhotos)
         diffResult.dispatchUpdatesTo(this)
     }
 

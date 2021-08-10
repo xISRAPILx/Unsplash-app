@@ -2,11 +2,11 @@ package com.example.testupstarts.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.testupstarts.PhotoInteractor
+import com.example.testupstarts.AuthInteractor
 
-class CardVmProvider(private val interactor: PhotoInteractor) :
+class AuthUnsplashVmProvider(private val authInteractor: AuthInteractor) :
     ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CardViewModel(interactor) as T
+        return AuthUnsplashViewModel(authInteractor) as T
     }
 }
