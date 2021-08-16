@@ -30,13 +30,11 @@ class CardViewModel(private val interactor: PhotoInteractor) : ViewModel() {
                     if (favorite) {
                         if (photo != null) {
                             interactor.likeAPhoto(photo.id)
-                            interactor.updateFavorite(photo.id, true)
                         }
                         snackbar.postValue(R.string.snackbar_add_text)
                     } else {
                         if (photo != null) {
                             interactor.unlikeAPhoto(photo.id)
-                            interactor.updateFavorite(it, false)
                         }
                         snackbar.postValue(R.string.snackbar_delete_text)
                     }

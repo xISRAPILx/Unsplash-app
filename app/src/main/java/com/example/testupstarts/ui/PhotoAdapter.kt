@@ -28,9 +28,8 @@ class PhotosAdapter(private val callback: PhotosCallback, private val flagResult
                 callback.onItemClick(photos[adapterPosition])
             }
             favButton.setOnClickListener {
-                callback.onLikeClick(favButton.isChecked, photos[adapterPosition])
                 photos[adapterPosition].favorite = favButton.isChecked
-                notifyItemChanged(adapterPosition)
+                callback.onLikeClick(favButton.isChecked, photos[adapterPosition], photos)
             }
         }
 
@@ -74,6 +73,11 @@ class PhotosAdapter(private val callback: PhotosCallback, private val flagResult
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun updateData(newPhotos: List<PhotosItem>) {
+        val diffCallback = PhotosDiffCallback(photos, newPhotos)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
 
 class PhotosDiffCallback(

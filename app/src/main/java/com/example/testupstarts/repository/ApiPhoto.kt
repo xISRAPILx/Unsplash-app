@@ -2,7 +2,7 @@ package com.example.testupstarts.repository
 
 import retrofit2.http.*
 
-interface Api {
+interface ApiPhoto {
     @GET("topics/{id_or_slug}/photos")
     suspend fun getPhotos(
         @Path("id_or_slug") id: String,
@@ -13,11 +13,11 @@ interface Api {
 
     @POST("photos/{id}/like")
     suspend fun likeAPhoto(
-        @Path("idPhoto") idPhoto: String
+        @Path("id") idPhoto: String
     )
 
     @DELETE("photos/{id}/like")
     suspend fun unlikeAPhoto(
-        @Path("idPhoto") idPhoto: String
+        @Path("id") idPhoto: String
     )
 }

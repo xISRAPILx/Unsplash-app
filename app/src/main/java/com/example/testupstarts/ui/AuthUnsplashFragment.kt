@@ -2,12 +2,14 @@ package com.example.testupstarts.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
 import com.example.testupstarts.di.App
@@ -38,22 +40,26 @@ class AuthUnsplashFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.tokenResult.observe(viewLifecycleOwner, Observer {
+            (activity as? MainActivity)?.startRootFragment(fragmentPhoto)
+        })
+
         webview_auth.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 val uri: Uri = Uri.parse(url)
-                val token = uri.getQueryParameter("code")
-                if (token != null) {
-                    viewModel.onTokenExtracted(token)
-                    (activity as? MainActivity)?.startRootFragment(fragmentPhoto)
+                val code = uri.getQueryParameter("code")
+                if (code != null) {
+                    viewModel.onAuthCodeExtracted(code)
+                    Log.e("code", code.toString())
                 }
             }
         }
-        webview_auth.loadUrl(UNSPLASH_URL)
+        webview_auth.loadUrl(AUTHORIZE_URL)
     }
 
     companion object {
-        const val UNSPLASH_URL: String =
-            "https://unsplash.com/oauth/authorize?client_id=4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk&&" +
-                    "redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&scope=public"
+        const val AUTHORIZE_URL: String =
+            "https://unsplash.com/oauth/authorize?client_id=4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk" +
+                    "&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&scope=public+write_likes+read_user+read_collections"
     }
 }

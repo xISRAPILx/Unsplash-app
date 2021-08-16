@@ -1,6 +1,5 @@
 package com.example.testupstarts.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,15 +27,13 @@ class PhotoViewModel(
     val state: LiveData<ViewState> get() = mutableState
     private val mutableTokenFlag: MutableLiveData<Boolean> = MutableLiveData(false)
     val tokenFlag: LiveData<Boolean> get() = mutableTokenFlag
-
-    fun onCreate() {
-        loadListFromNetwork()
-        Log.e("onCreate()PhotoFragment", true.toString())
-    }
+    private val mutableCache: MutableLiveData<List<PhotosItem>> = MutableLiveData()
+    val cache: LiveData<List<PhotosItem>> get() = mutableCache
 
     fun onViewCreated() {
         val flag = authInteractor.isGuest()
         mutableTokenFlag.postValue(flag)
+        loadListFromNetwork()
         loadListFromCache()
     }
 
@@ -50,10 +47,8 @@ class PhotoViewModel(
             withContext(Dispatchers.Main) {
                 try {
                     val cache = photoInteractor.getPhotosFromCache()
-                    if (cache != null) {
-                        Log.e("postValue(ResultState)", true.toString())
-                        mutableState.postValue(ResultState(cache))
-                    }
+                    mutableCache.postValue(cache)
+                    mutableState.postValue(ResultState(cache))
                 } catch (e: Exception) {
                     mutableState.postValue(ErrorState)
                 }
@@ -63,26 +58,9 @@ class PhotoViewModel(
 
     private fun loadListFromNetwork() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val cache = photoInteractor.getPhotosFromCache()
-                Log.e("cache", cache.toString())
-                val list = photoInteractor.getPhotosFromUnsplash()
-                Log.e("list", list.toString())
-
-                for (l in list) {
-                    for (c in cache.orEmpty()) {
-                        if (l.id == c.id) {
-                            Log.e("updatePhoto in Room", l.id.equals(c.id).toString())
-                            photoInteractor.updatePhotoFromCache(l)
-                        }
-                        else {
-                            Log.e("addPhoto in Room", l.id.equals(c.id).toString())
-                            Log.e("l.id", l.id.toString())
-                            Log.e("c.id", c.id.toString())
-                            photoInteractor.addPhotoToCache(l)
-                        }
-                    }
-                }
+            withContext(Dispatchers.Main) {
+                val photoList = photoInteractor.getPhotosFromUnsplash()
+                photoInteractor.clearAndAddToCache(photoList)
             }
         }
     }
@@ -90,11 +68,9 @@ class PhotoViewModel(
     fun onFavClicked(favorite: Boolean, photo: PhotosItem) = viewModelScope.launch {
         if (favorite) {
             photoInteractor.likeAPhoto(photo.id)
-            photoInteractor.updateFavorite(photo.id, true)
             snackbar.postValue(R.string.snackbar_add_text)
         } else {
             photoInteractor.unlikeAPhoto(photo.id)
-            photoInteractor.updateFavorite(photo.id, false)
             snackbar.postValue(R.string.snackbar_delete_text)
         }
     }

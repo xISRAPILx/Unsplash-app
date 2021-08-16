@@ -11,7 +11,8 @@ import com.example.testupstarts.viewmodels.PhotoVmProvider
 
 class AppContainer(private val context: Context) {
 
-    private val localRepo : LocalRepository = LocalRepoImpl(context)
+    private val retroModuleAuth = RetrofitModuleAuth()
+    private val localRepo : LocalRepository = LocalRepoImpl(context, retroModuleAuth.apiClient)
     private val authInteractor = AuthInteractor(localRepo)
     private val retroModule = RetrofitModule(authInteractor)
     private val localDataSource = PhotoDatabase.getDatabase(context).photoDao()

@@ -19,7 +19,10 @@ data class Photo(
     val author: User,
 
     @SerializedName("likes")
-    val likes: Int
+    val likes: Int,
+
+    @SerializedName("liked_by_user")
+    val liked_by_user: Boolean
 ) : Parcelable
 
 @Parcelize

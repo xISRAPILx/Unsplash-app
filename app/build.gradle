@@ -27,11 +27,19 @@ android {
             buildConfigField "String", "BASE_URL", '"https://api.unsplash.com/"'
             buildConfigField "String", "CLIENT_ID", '"4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk"'
             buildConfigField "String", "ID_OR_SLUG", '"6sMVjTLSkeQ"'
+            buildConfigField "String", "BASE_URL_AUTH",' "https://unsplash.com/"'
+            buildConfigField "String", "CLIENT_SECRET",' "ScV5KIgCknIFzJAetovO5dWQBCeF3SRohBR5r_FZlsI"'
+            buildConfigField "String", "REDIRECT_URI",' "urn:ietf:wg:oauth:2.0:oob"'
+            buildConfigField "String", "GRANT_TYPE",'"authorization_code"'
         }
         release {
             buildConfigField "String", "BASE_URL", '"https://api.unsplash.com/"'
             buildConfigField "String", "CLIENT_ID", '"4-eO-OIi38lTUD6Oa3qEqSd8CBPNVHpBR3Bm-yzoYKk"'
             buildConfigField "String", "ID_OR_SLUG", '"6sMVjTLSkeQ"'
+            buildConfigField "String", "BASE_URL_AUTH",'"https://unsplash.com/"'
+            buildConfigField "String", "CLIENT_SECRET",'"ScV5KIgCknIFzJAetovO5dWQBCeF3SRohBR5r_FZlsI"'
+            buildConfigField "String", "REDIRECT_URI",'"urn:ietf:wg:oauth:2.0:oob"'
+            buildConfigField "String", "GRANT_TYPE",'"authorization_code"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

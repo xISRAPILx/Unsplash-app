@@ -28,7 +28,6 @@ class PhotoFragment() : Fragment() {
             viewModelStore,
             App.instance.getAppContainer().getPhotoVmProvider()
         ).get(PhotoViewModel::class.java)
-        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -46,20 +45,24 @@ class PhotoFragment() : Fragment() {
         rv_catalog?.layoutManager = GridLayoutManager(requireContext(), 2)
         rv_catalog?.setHasFixedSize(true)
         viewModel.onViewCreated()
-        viewModel.tokenFlag.observe(viewLifecycleOwner, Observer { resultFlag ->
-            flag = resultFlag
+        viewModel.tokenFlag.observe(viewLifecycleOwner, Observer { tokenFlag ->
+            flag = tokenFlag
         })
-        photosAdapter = PhotosAdapter(object : PhotosCallback {
-            override fun onItemClick(photo: PhotosItem) {
-                openCard(photo, flag)
-            }
-            override fun onLikeClick(like: Boolean, photo: PhotosItem) {
-                viewModel.onFavClicked(like, photo)
-            }
-        },flag)
+        photosAdapter = PhotosAdapter(
+            object : PhotosCallback {
+                override fun onItemClick(photo: PhotosItem) {
+                    openCard(photo, flag)
+                }
+                override fun onLikeClick(like: Boolean, photo: PhotosItem, photos: List<PhotosItem>) {
+                    viewModel.onFavClicked(like, photo)
+                    photosAdapter.updateData(photos)
+                }
+            },
+            flag
+        )
         rv_catalog?.adapter = photosAdapter
         viewModel.snackbar.observe(viewLifecycleOwner, {
-            Snackbar.make(view,it, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
         })
         viewModel.state.observe(viewLifecycleOwner, { state ->
             when (state) {
@@ -67,6 +70,10 @@ class PhotoFragment() : Fragment() {
                 ErrorState -> showError()
                 is ResultState -> showList(state.list)
             }
+        })
+
+        viewModel.cache.observe(viewLifecycleOwner, {cache ->
+            photosAdapter.setData(cache)
         })
 
     }

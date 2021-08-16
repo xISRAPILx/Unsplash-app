@@ -1,5 +1,6 @@
 package com.example.testupstarts
 
+import android.util.Log
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -9,10 +10,11 @@ class Interceptor(private val authInteractor: AuthInteractor): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var original : Request = chain
             .request()
-        if (original.method == "POST" || original.method == "DELETE") {
+        if (authInteractor.getTokenFromPrefs() != null) {
             original = original.newBuilder()
-                .addHeader("Authorization", "Bearer "+ authInteractor.getToken().toString())
+                .addHeader(AUTHORIZATION_KEY,  String.format("Bearer %s", authInteractor.getTokenFromPrefs()))
                 .build()
+            Log.e("header", original.toString())
         }
         val originalHttpUrl : HttpUrl = original.url
         val url : HttpUrl = originalHttpUrl.newBuilder()
@@ -23,5 +25,8 @@ class Interceptor(private val authInteractor: AuthInteractor): Interceptor {
         val request : Request = requestBuilder
             .build()
         return chain.proceed(request)
+    }
+    companion object {
+        const val AUTHORIZATION_KEY = "Authorization"
     }
 }
