@@ -2,7 +2,6 @@ package com.example.testupstarts.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,10 +47,7 @@ class AuthUnsplashFragment() : Fragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 val uri: Uri = Uri.parse(url)
                 val code = uri.getQueryParameter("code")
-                if (code != null) {
-                    viewModel.onAuthCodeExtracted(code)
-                    Log.e("code", code.toString())
-                }
+                if (code != null) { viewModel.onAuthCodeExtracted(code) }
             }
         }
         webview_auth.loadUrl(AUTHORIZE_URL)

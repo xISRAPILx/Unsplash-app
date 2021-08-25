@@ -25,16 +25,18 @@ class CardViewModel(private val interactor: PhotoInteractor) : ViewModel() {
     }
 
     fun onFavClicked(favorite: Boolean, photo: PhotosItem?) = viewModelScope.launch {
-            withContext(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
                 id?.let {
                     if (favorite) {
                         if (photo != null) {
-                            interactor.likeAPhoto(photo.id)
+                            interactor.likeAPhoto(it)
+                            interactor.updatePhoto(it, favorite)
                         }
                         snackbar.postValue(R.string.snackbar_add_text)
                     } else {
                         if (photo != null) {
-                            interactor.unlikeAPhoto(photo.id)
+                            interactor.unlikeAPhoto(it)
+                            interactor.updatePhoto(it, favorite)
                         }
                         snackbar.postValue(R.string.snackbar_delete_text)
                     }

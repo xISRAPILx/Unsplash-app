@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_card.*
 
 class CardFragment : Fragment() {
 
-    private lateinit var viewModel : CardViewModel
+    private lateinit var viewModel: CardViewModel
 
     companion object {
         const val PHOTO_ITEM = "photoItem"
@@ -32,6 +32,7 @@ class CardFragment : Fragment() {
             }
         }
     }
+
     private var photos: PhotosItem? = null
     private var flag: Boolean? = null
 
@@ -55,26 +56,29 @@ class CardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         photos?.let {
+            viewModel.onViewCreated(it.id, it.favorite)
             Picasso.get()
                 .load(it.imageUrlRegular)
                 .into(img_card)
             card_like.text =
                 context?.getString(R.string.likes, it.likes)
-            card_author_username.text = context?.getString(R.string.author_username, it.authorUserName)
-            card_author_insta.text = context?.getString(R.string.author_insta_username, it.instagramUsername)
+            card_author_username.text =
+                context?.getString(R.string.author_username, it.authorUserName)
+            card_author_insta.text =
+                context?.getString(R.string.author_insta_username, it.instagramUsername)
             if (flag == true) {
                 card_fav.visibility = View.GONE
-            } else { card_fav.visibility = View.VISIBLE }
-            viewModel.onViewCreated(it.id, it.favorite)
+            } else {
+                card_fav.visibility = View.VISIBLE
+            }
             viewModel.snackbar.observe(viewLifecycleOwner, {
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             })
             viewModel.favorite.observe(viewLifecycleOwner, { card_fav.isChecked = it })
             card_fav.setOnClickListener { view ->
-                    viewModel.onFavClicked(card_fav.isChecked, photos)
-                }
+                viewModel.onFavClicked(card_fav.isChecked, photos)
+            }
         }
         btn_back.setOnClickListener {
             (activity as? MainActivity)?.goBack()

@@ -1,5 +1,6 @@
 package com.example.testupstarts.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,8 +28,10 @@ class PhotoViewModel(
     val state: LiveData<ViewState> get() = mutableState
     private val mutableTokenFlag: MutableLiveData<Boolean> = MutableLiveData(false)
     val tokenFlag: LiveData<Boolean> get() = mutableTokenFlag
-    private val mutableCache: MutableLiveData<List<PhotosItem>> = MutableLiveData()
-    val cache: LiveData<List<PhotosItem>> get() = mutableCache
+
+    fun onCreate() {
+        loadListFromNetwork()
+    }
 
     fun onViewCreated() {
         val flag = authInteractor.isGuest()
@@ -44,10 +47,10 @@ class PhotoViewModel(
     private fun loadListFromCache() {
         mutableState.postValue(ProgressState)
         viewModelScope.launch {
-            withContext(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
                 try {
                     val cache = photoInteractor.getPhotosFromCache()
-                    mutableCache.postValue(cache)
+                    Log.e("list", cache.size.toString())
                     mutableState.postValue(ResultState(cache))
                 } catch (e: Exception) {
                     mutableState.postValue(ErrorState)
@@ -58,7 +61,7 @@ class PhotoViewModel(
 
     private fun loadListFromNetwork() {
         viewModelScope.launch {
-            withContext(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
                 val photoList = photoInteractor.getPhotosFromUnsplash()
                 photoInteractor.clearAndAddToCache(photoList)
             }
@@ -66,12 +69,16 @@ class PhotoViewModel(
     }
 
     fun onFavClicked(favorite: Boolean, photo: PhotosItem) = viewModelScope.launch {
-        if (favorite) {
-            photoInteractor.likeAPhoto(photo.id)
-            snackbar.postValue(R.string.snackbar_add_text)
-        } else {
-            photoInteractor.unlikeAPhoto(photo.id)
-            snackbar.postValue(R.string.snackbar_delete_text)
+        withContext(Dispatchers.IO) {
+            if (favorite) {
+                photoInteractor.likeAPhoto(photo.id)
+                photoInteractor.updatePhoto(photo.id, favorite)
+                snackbar.postValue(R.string.snackbar_add_text)
+            } else {
+                photoInteractor.unlikeAPhoto(photo.id)
+                photoInteractor.updatePhoto(photo.id, favorite)
+                snackbar.postValue(R.string.snackbar_delete_text)
+            }
         }
     }
 }

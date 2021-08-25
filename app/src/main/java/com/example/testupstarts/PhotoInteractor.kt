@@ -11,7 +11,7 @@ class PhotoInteractor(
     private val photoDao: PhotoDao
 ) {
     // Network
-    suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.Main) {
+    suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.IO) {
         photoRepo.getPhotos().map { PhotosItem(it.id,
             it.desc,
             it.imageUrls.regular,
@@ -32,7 +32,7 @@ class PhotoInteractor(
     }
 
     // DAO
-    suspend fun getPhotosFromCache() = withContext(Dispatchers.Main){
+    suspend fun getPhotosFromCache() = withContext(Dispatchers.IO){
         val cache = photoDao.getAllPhoto()
         cache
     }
@@ -41,4 +41,7 @@ class PhotoInteractor(
         photoDao.clearAndAdd(photolist)
     }
 
+    suspend fun updatePhoto(id: String, favorite: Boolean) {
+        photoDao.updatePhotoFromCache(id, favorite)
+    }
 }

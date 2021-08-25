@@ -12,6 +12,7 @@ import com.example.testupstarts.PhotosCallback
 import com.example.testupstarts.R
 import com.example.testupstarts.di.App
 import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.ui.list.PhotoAdapter
 import com.example.testupstarts.viewmodels.PhotoViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_catalog.*
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_catalog.*
 class PhotoFragment() : Fragment() {
 
     private lateinit var viewModel: PhotoViewModel
-    private lateinit var photosAdapter: PhotosAdapter
+    private lateinit var photosAdapter: PhotoAdapter
     private var flag: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,7 @@ class PhotoFragment() : Fragment() {
             viewModelStore,
             App.instance.getAppContainer().getPhotoVmProvider()
         ).get(PhotoViewModel::class.java)
+        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -48,14 +50,13 @@ class PhotoFragment() : Fragment() {
         viewModel.tokenFlag.observe(viewLifecycleOwner, Observer { tokenFlag ->
             flag = tokenFlag
         })
-        photosAdapter = PhotosAdapter(
+        photosAdapter = PhotoAdapter(
             object : PhotosCallback {
                 override fun onItemClick(photo: PhotosItem) {
                     openCard(photo, flag)
                 }
-                override fun onLikeClick(like: Boolean, photo: PhotosItem, photos: List<PhotosItem>) {
+                override fun onLikeClick(like: Boolean, photo: PhotosItem) {
                     viewModel.onFavClicked(like, photo)
-                    photosAdapter.updateData(photos)
                 }
             },
             flag
@@ -71,11 +72,6 @@ class PhotoFragment() : Fragment() {
                 is ResultState -> showList(state.list)
             }
         })
-
-        viewModel.cache.observe(viewLifecycleOwner, {cache ->
-            photosAdapter.setData(cache)
-        })
-
     }
 
     private fun openCard(photo: PhotosItem, flag: Boolean) {
@@ -83,9 +79,10 @@ class PhotoFragment() : Fragment() {
     }
 
     private fun showList(photos: List<PhotosItem>) {
+        photosAdapter.submitList(photos)
+        photosAdapter.setData(photos)
         tv_found.text = context?.getString(R.string.found_text, photos.size)
         tv_found.visibility = View.VISIBLE
-        photosAdapter.setData(photos)
         rv_catalog.visibility = View.VISIBLE
         progress_bar_catalog.visibility = View.GONE
         progress_bar_catalog.hide()
@@ -98,9 +95,7 @@ class PhotoFragment() : Fragment() {
         progress_bar_catalog.visibility = View.GONE
         progress_bar_catalog.hide()
         error_message.visibility = View.VISIBLE
-        btn_try_again.setOnClickListener {
-            viewModel.onTryAgainClicked()
-        }
+        btn_try_again.setOnClickListener { viewModel.onTryAgainClicked() }
     }
 
     fun showProgress() {
