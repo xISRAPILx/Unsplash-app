@@ -1,8 +1,8 @@
-package com.example.testupstarts
+package com.example.testupstarts.interactors
 
-import com.example.testupstarts.repository.PhotoDao
 import com.example.testupstarts.repository.PhotoRepository
 import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.room.PhotoDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,7 +12,8 @@ class PhotoInteractor(
 ) {
     // Network
     suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.IO) {
-        photoRepo.getPhotos().map { PhotosItem(it.id,
+        photoRepo.getPhotos().map {
+            PhotosItem(it.id,
             it.desc,
             it.imageUrls.regular,
             it.imageUrls.small,

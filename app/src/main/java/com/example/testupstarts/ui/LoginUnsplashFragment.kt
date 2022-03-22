@@ -5,27 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.testupstarts.R
-import kotlinx.android.synthetic.main.fragment_login_unsplash.*
+import com.example.testupstarts.databinding.FragmentLoginUnsplashBinding
 
 class LoginUnsplashFragment: Fragment() {
-    private val fragmentPhoto = PhotoFragment()
+    private lateinit var binding: FragmentLoginUnsplashBinding
+    private val fragmentPhoto = PhotoListFragment()
     private val fragmentAuthUnsplash = AuthUnsplashFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login_unsplash, container,false)
-    }
+    ): View? = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button_login.setOnClickListener {
+        binding.buttonLogin.setOnClickListener {
             (activity as? MainActivity)?.startFragment(fragmentAuthUnsplash)
         }
-        text_guest.setOnClickListener {
+        binding.textGuest.setOnClickListener {
             (activity as? MainActivity)?.startFragment(fragmentPhoto)
         }
 

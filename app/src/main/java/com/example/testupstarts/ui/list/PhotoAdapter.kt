@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testupstarts.PhotosCallback
 import com.example.testupstarts.R
+import com.example.testupstarts.databinding.RvItemBinding
 import com.example.testupstarts.repository.PhotosItem
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.rv_item.view.*
 
 class PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
     ListAdapter<PhotosItem, PhotoAdapter.Photo1ViewHolder>(PhotoDiffUtil()) {
@@ -27,33 +27,30 @@ class PhotoAdapter(private val callback: PhotosCallback, private val flagResult:
     }
 
     inner class Photo1ViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        private val photoImage = item.img_item
-        private val author = item.author
-        private val likes = item.item_likes
-        private val favButton = item.item_fav_btn
+        private lateinit var binding: RvItemBinding
 
         init {
             item.setOnClickListener {
                 callback.onItemClick(photos[layoutPosition])
             }
-            favButton.setOnClickListener {
-                photos[layoutPosition].favorite = favButton.isChecked
-                callback.onLikeClick(favButton.isChecked, photos[layoutPosition])
+            binding.itemFavBtn.setOnClickListener {
+                photos[layoutPosition].favorite = binding.itemFavBtn.isChecked
+                callback.onLikeClick(binding.itemFavBtn.isChecked, photos[layoutPosition])
             }
         }
 
         fun bind(photo: PhotosItem) {
             Picasso.get()
                 .load(photo.imageUrlSmall)
-                .into(photoImage)
-            author.text = photo.authorName
-            likes.text = itemView.context.getString(R.string.likes, photo.likes)
+                .into(binding.imgItem)
+            binding.author.text = photo.authorName
+            binding.itemLikes.text = itemView.context.getString(R.string.likes, photo.likes)
             if (flagResult) {
-                favButton.visibility = View.GONE
+                binding.itemFavBtn.visibility = View.GONE
             } else {
-                favButton.visibility = View.VISIBLE
+                binding.itemFavBtn.visibility = View.VISIBLE
             }
-            favButton.isChecked = photo.favorite
+            binding.itemFavBtn.isChecked = photo.favorite
         }
     }
 

@@ -1,11 +1,12 @@
-package com.example.testupstarts.viewmodels
+package com.example.testupstarts.viewmodels.providers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.testupstarts.AuthInteractor
+import com.example.testupstarts.interactors.AuthInteractor
+import com.example.testupstarts.viewmodels.MainActivityViewModel
 
 class MainActivityVmProvider(private val authInteractor: AuthInteractor) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MainActivityViewModel(authInteractor) as T
     }
 }

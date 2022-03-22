@@ -2,6 +2,7 @@ package com.example.testupstarts.repository
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.testupstarts.repository.api.ApiAuth
 
 class LocalRepoImpl(context: Context, private val apiAuth: ApiAuth) : LocalRepository {
 

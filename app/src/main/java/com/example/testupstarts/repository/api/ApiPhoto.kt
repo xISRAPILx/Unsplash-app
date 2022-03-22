@@ -1,5 +1,6 @@
-package com.example.testupstarts.repository
+package com.example.testupstarts.repository.api
 
+import com.example.testupstarts.repository.Photo
 import retrofit2.http.*
 
 interface ApiPhoto {

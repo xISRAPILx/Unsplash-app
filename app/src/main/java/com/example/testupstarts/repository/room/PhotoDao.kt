@@ -1,9 +1,10 @@
-package com.example.testupstarts.repository
+package com.example.testupstarts.repository.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.testupstarts.repository.PhotosItem
 
 @Dao
 interface PhotoDao {

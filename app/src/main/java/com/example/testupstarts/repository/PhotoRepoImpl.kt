@@ -1,6 +1,7 @@
 package com.example.testupstarts.repository
 
 import com.example.testupstarts.BuildConfig
+import com.example.testupstarts.repository.api.ApiPhoto
 
 class PhotoRepoImpl(private val api: ApiPhoto) : PhotoRepository {
     override suspend fun getPhotos(): List<Photo> {

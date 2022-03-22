@@ -1,4 +1,4 @@
-package com.example.testupstarts
+package com.example.testupstarts.interactors
 
 import com.example.testupstarts.repository.LocalRepository
 import kotlinx.coroutines.Dispatchers
