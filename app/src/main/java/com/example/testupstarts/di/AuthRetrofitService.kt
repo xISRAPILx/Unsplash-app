@@ -1,19 +1,19 @@
 package com.example.testupstarts.di
 
+import com.example.testupstarts.AuthInterceptor
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.Interceptor
-import com.example.testupstarts.interactors.AuthInteractor
-import com.example.testupstarts.repository.api.ApiPhoto
+import com.example.testupstarts.repository.api.ApiAuth
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitModule(authInteractor: AuthInteractor){
-    private val loggingInterceptor : HttpLoggingInterceptor = HttpLoggingInterceptor()
+class AuthRetrofitService {
+    private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
-    private val interceptor = Interceptor(authInteractor)
+
+    private val interceptor = AuthInterceptor()
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
@@ -23,12 +23,12 @@ class RetrofitModule(authInteractor: AuthInteractor){
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
+        .baseUrl(BuildConfig.BASE_URL_AUTH)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val apiClient : ApiPhoto by lazy {
-        retrofit.create(ApiPhoto::class.java)
+    val apiClient: ApiAuth by lazy {
+        retrofit.create(ApiAuth::class.java)
     }
 }

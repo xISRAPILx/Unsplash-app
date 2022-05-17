@@ -1,5 +1,7 @@
 package com.example.testupstarts.repository
 
+import com.example.testupstarts.repository.models.AuthToken
+
 interface LocalRepository {
     fun saveToken(token:String)
     fun removeToken(token:String)
