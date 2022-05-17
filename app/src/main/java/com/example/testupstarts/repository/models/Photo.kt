@@ -1,59 +1,59 @@
 package com.example.testupstarts.repository
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Photo(
-    @SerializedName("id")
+    @field:Json(name = "id")
     val id: String,
 
-    @SerializedName("description")
+    @field:Json(name = "description")
     val desc: String? = null,
 
-    @SerializedName("urls")
+    @field:Json(name = "urls")
     val imageUrls: Urls,
 
-    @SerializedName("user")
+    @field:Json(name = "user")
     val author: User,
 
-    @SerializedName("likes")
+    @field:Json(name = "likes")
     val likes: Int,
 
-    @SerializedName("liked_by_user")
+    @field:Json(name = "liked_by_user")
     val liked_by_user: Boolean
 ) : Parcelable
 
 @Parcelize
 data class User(
-    @SerializedName("username")
+    @field:Json(name = "username")
     var username: String,
 
-    @SerializedName("instagram_username")
+    @field:Json(name = "instagram_username")
     var instagramUsername: String? = null,
 
-    @SerializedName("name")
+    @field:Json(name = "name")
     var name: String? = null,
 
-    @SerializedName("first_name")
+    @field:Json(name = "first_name")
     var first_name: String? = null,
 
-    @SerializedName("last_name")
+    @field:Json(name = "last_name")
     var last_name: String? = null
 ) : Parcelable
 
 @Parcelize
 data class Urls(
-    @SerializedName("raw")
+    @field:Json(name = "raw")
     var raw: String,
 
-    @SerializedName("full")
+    @field:Json(name = "full")
     var full: String,
 
-    @SerializedName("regular")
+    @field:Json(name = "regular")
     var regular: String,
 
-    @SerializedName("small")
+    @field:Json(name = "small")
     var small: String,
 ) : Parcelable

@@ -1,8 +1,8 @@
 package com.example.testupstarts
 
-import com.example.testupstarts.repository.PhotoDao
 import com.example.testupstarts.repository.PhotoRepository
 import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.room.PhotoDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
