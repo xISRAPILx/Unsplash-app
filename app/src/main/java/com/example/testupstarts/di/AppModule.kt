@@ -2,12 +2,17 @@ package com.example.testupstarts.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.testupstarts.AuthInteractor
 import com.example.testupstarts.BuildConfig
 import com.example.testupstarts.Interceptor
-import com.example.testupstarts.repository.*
+import com.example.testupstarts.repository.PrefsRepoImpl
+import com.example.testupstarts.repository.PrefsRepository
+import com.example.testupstarts.repository.network.ApiAuth
+import com.example.testupstarts.repository.network.ApiPhoto
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.repository.room.PhotoDatabase
+import com.example.testupstarts.ui.auth_screen.AuthInteractor
+import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepoImpl
+import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -76,8 +81,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalRepository(sharedPreferences: SharedPreferences, apiAuth: ApiAuth): LocalRepository {
-        return LocalRepoImpl(sharedPreferences,apiAuth)
+    fun provideLocalRepository(sharedPreferences: SharedPreferences, apiAuth: ApiAuth): PrefsRepository {
+        return PrefsRepoImpl(sharedPreferences,apiAuth)
     }
 
     @Provides

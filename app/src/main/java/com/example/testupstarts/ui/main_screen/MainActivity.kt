@@ -1,4 +1,4 @@
-package com.example.testupstarts.ui
+package com.example.testupstarts.ui.main_screen
 
 import android.app.Fragment
 import android.app.FragmentManager
@@ -11,7 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
 import com.example.testupstarts.databinding.ActivityMainBinding
 import com.example.testupstarts.di.App
-import com.example.testupstarts.viewmodels.MainActivityViewModel
+import com.example.testupstarts.ui.login_screen.LoginUnsplashFragment
+import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
 
 class MainActivity : AppCompatActivity() {
 

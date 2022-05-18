@@ -1,4 +1,4 @@
-package com.example.testupstarts.viewmodels
+package com.example.testupstarts.ui.card_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
-import com.example.testupstarts.interactors.PhotoInteractor
 import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PhotoViewModel(private val interactor: PhotoInteractor) : ViewModel() {
+class CardViewModel(private val interactor: PhotoInteractor) : ViewModel() {
 
     private var id: String? = null
     val snackbar: SingleLiveEvent<Int> = SingleLiveEvent()

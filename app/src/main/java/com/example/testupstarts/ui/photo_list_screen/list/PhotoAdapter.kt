@@ -1,11 +1,11 @@
-package com.example.testupstarts.ui.list
+package com.example.testupstarts.ui.photo_list_screen.list
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testupstarts.PhotosCallback
+import com.example.testupstarts.ui.photo_list_screen.PhotosCallback
 import com.example.testupstarts.R
 import com.example.testupstarts.databinding.RvItemBinding
 import com.example.testupstarts.repository.PhotosItem

@@ -1,4 +1,4 @@
-package com.example.testupstarts.ui.list
+package com.example.testupstarts.ui.photo_list_screen.list
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testupstarts.repository.PhotosItem

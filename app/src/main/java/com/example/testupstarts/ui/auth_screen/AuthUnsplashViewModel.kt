@@ -1,4 +1,4 @@
-package com.example.testupstarts.viewmodels
+package com.example.testupstarts.ui.auth_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

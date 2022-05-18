@@ -2,7 +2,7 @@ package com.example.testupstarts.di
 
 import com.example.testupstarts.AuthInterceptor
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.repository.api.ApiAuth
+import com.example.testupstarts.repository.network.ApiAuth
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

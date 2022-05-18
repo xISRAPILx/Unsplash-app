@@ -1,4 +1,4 @@
-package com.example.testupstarts
+package com.example.testupstarts.ui.photo_list_screen
 
 import com.example.testupstarts.repository.PhotosItem
 

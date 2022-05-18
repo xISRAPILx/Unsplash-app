@@ -1,9 +1,9 @@
-package com.example.testupstarts.viewmodels
+package com.example.testupstarts.ui.main_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.testupstarts.interactors.AuthInteractor
+import com.example.testupstarts.ui.auth_screen.AuthInteractor
 
 class MainActivityViewModel(private val authInteractor: AuthInteractor): ViewModel() {
 

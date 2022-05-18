@@ -1,4 +1,4 @@
-package com.example.testupstarts.ui
+package com.example.testupstarts.ui.card_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,28 +7,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
-import com.example.testupstarts.databinding.FragmentCardBinding
 import com.example.testupstarts.di.App
 import com.example.testupstarts.repository.PhotosItem
-import com.example.testupstarts.viewmodels.PhotoViewModel
+import com.example.testupstarts.ui.main_screen.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_card.*
 
-class PhotoFragment : Fragment() {
+class CardFragment : Fragment() {
 
-    private lateinit var binding: FragmentCardBinding
-    private lateinit var viewModel: PhotoViewModel
+    private lateinit var viewModel: CardViewModel
 
     companion object {
         const val PHOTO_ITEM = "photoItem"
         const val FLAG_GUEST = "guestFlag"
 
-        fun newInstance(photo: PhotosItem, flag: Boolean): PhotoFragment {
+        fun newInstance(photo: PhotosItem, flag: Boolean): CardFragment {
             val bundle = Bundle().apply {
                 putParcelable(PHOTO_ITEM, photo)
                 putBoolean(FLAG_GUEST, flag)
             }
-            return PhotoFragment().apply {
+            return CardFragment().apply {
                 arguments = bundle
             }
         }
@@ -41,14 +40,16 @@ class PhotoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_card, container, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
             viewModelStore,
             App.instance.getAppContainer().getCardVmProvider()
-        ).get(PhotoViewModel::class.java)
+        ).get(CardViewModel::class.java)
         photos = arguments?.getParcelable(PHOTO_ITEM)
         flag = arguments?.getBoolean(FLAG_GUEST)
     }
@@ -59,27 +60,27 @@ class PhotoFragment : Fragment() {
             viewModel.onViewCreated(it.id, it.favorite)
             Picasso.get()
                 .load(it.imageUrlRegular)
-                .into(binding.imgCard)
-            binding.cardLike.text =
+                .into(img_card)
+            card_like.text =
                 context?.getString(R.string.likes, it.likes)
-            binding.cardAuthorUsername.text =
+            card_author_username.text =
                 context?.getString(R.string.author_username, it.authorUserName)
-            binding.cardAuthorInsta.text =
+            card_author_insta.text =
                 context?.getString(R.string.author_insta_username, it.instagramUsername)
             if (flag == true) {
-                binding.cardFav.visibility = View.GONE
+                card_fav.visibility = View.GONE
             } else {
-                binding.cardFav.visibility = View.VISIBLE
+                card_fav.visibility = View.VISIBLE
             }
             viewModel.snackbar.observe(viewLifecycleOwner, {
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             })
-            viewModel.favorite.observe(viewLifecycleOwner, { binding.cardFav.isChecked = it })
-            binding.cardFav.setOnClickListener { view ->
-                viewModel.onFavClicked(binding.cardFav.isChecked, photos)
+            viewModel.favorite.observe(viewLifecycleOwner, { card_fav.isChecked = it })
+            card_fav.setOnClickListener { view ->
+                viewModel.onFavClicked(card_fav.isChecked, photos)
             }
         }
-        binding.btnBack.setOnClickListener {
+        btn_back.setOnClickListener {
             (activity as? MainActivity)?.goBack()
         }
     }

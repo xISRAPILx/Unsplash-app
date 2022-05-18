@@ -2,7 +2,7 @@ package com.example.testupstarts.repository
 
 import com.example.testupstarts.repository.models.AuthToken
 
-interface LocalRepository {
+interface PrefsRepository {
     fun saveToken(token:String)
     fun removeToken(token:String)
     fun isGuest():Boolean

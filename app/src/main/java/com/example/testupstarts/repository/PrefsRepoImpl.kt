@@ -2,8 +2,9 @@ package com.example.testupstarts.repository
 
 import android.content.SharedPreferences
 import com.example.testupstarts.repository.models.AuthToken
+import com.example.testupstarts.repository.network.ApiAuth
 
-class LocalRepoImpl(private val sharedPref:SharedPreferences, private val apiAuth: ApiAuth) : LocalRepository {
+class PrefsRepoImpl(private val sharedPref:SharedPreferences, private val apiAuth: ApiAuth) : PrefsRepository {
 
     override fun saveToken(token: String) {
         sharedPref.edit().putString(TOKEN_PREFS, token).apply()
