@@ -1,9 +1,9 @@
 package com.example.testupstarts.di
 
-import com.example.testupstarts.AuthInteractor
+import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import com.example.testupstarts.BuildConfig
 import com.example.testupstarts.Interceptor
-import com.example.testupstarts.repository.ApiPhoto
+import com.example.testupstarts.repository.network.ApiPhoto
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

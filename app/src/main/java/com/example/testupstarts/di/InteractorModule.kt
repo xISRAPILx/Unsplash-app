@@ -1,9 +1,9 @@
 package com.example.testupstarts.di
 
-import com.example.testupstarts.AuthInteractor
-import com.example.testupstarts.PhotoInteractor
-import com.example.testupstarts.repository.LocalRepository
-import com.example.testupstarts.repository.PhotoRepository
+import com.example.testupstarts.ui.auth_screen.AuthInteractor
+import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
+import com.example.testupstarts.repository.PrefsRepository
+import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
 import com.example.testupstarts.repository.room.PhotoDao
 import dagger.Module
 import dagger.Provides
@@ -12,8 +12,8 @@ import dagger.Provides
 class InteractorModule {
 
     @Provides
-    fun provideAuthInteractor(localRepository: LocalRepository): AuthInteractor {
-        return AuthInteractor(localRepository)
+    fun provideAuthInteractor(prefsRepository: PrefsRepository): AuthInteractor {
+        return AuthInteractor(prefsRepository)
     }
 
     @Provides
