@@ -1,8 +1,7 @@
 package com.example.testupstarts.di
 
-import com.example.testupstarts.AuthInterceptor
+import com.example.testupstarts.repository.network.AppAuthInterceptor
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.repository.network.ApiAuth
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ class AuthRetrofitService {
     private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    private val interceptor = AuthInterceptor()
+    private val interceptor = AppAuthInterceptor()
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)

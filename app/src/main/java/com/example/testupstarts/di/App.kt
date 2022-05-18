@@ -2,18 +2,13 @@ package com.example.testupstarts.di
 
 import android.app.Application
 
-class App(): Application() {
-    private lateinit var appContainer: AppContainer
-
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
-            instance = this
-            appContainer = AppContainer(applicationContext)
+        appComponent =
     }
 
-    fun getAppContainer() = appContainer
-
     companion object {
-        lateinit var instance: App
+        lateinit var appComponent: AppComponent
     }
 }

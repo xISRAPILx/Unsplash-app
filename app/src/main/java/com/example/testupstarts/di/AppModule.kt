@@ -3,10 +3,9 @@ package com.example.testupstarts.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.Interceptor
+import com.example.testupstarts.repository.network.AuthInterceptor
 import com.example.testupstarts.repository.PrefsRepoImpl
 import com.example.testupstarts.repository.PrefsRepository
-import com.example.testupstarts.repository.network.ApiAuth
 import com.example.testupstarts.repository.network.ApiPhoto
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.repository.room.PhotoDatabase
@@ -33,15 +32,15 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideInterceptor(authInteractor: AuthInteractor): Interceptor {
-        return Interceptor(authInteractor)
+    fun provideInterceptor(authInteractor: AuthInteractor): AuthInterceptor {
+        return AuthInterceptor(authInteractor)
     }
 
     @Provides
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        interceptor: Interceptor
+        interceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)

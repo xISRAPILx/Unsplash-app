@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.ui.ErrorState
 import com.example.testupstarts.ui.ProgressState
 import com.example.testupstarts.ui.ResultState

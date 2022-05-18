@@ -1,7 +1,7 @@
 package com.example.testupstarts.ui.photo_list_screen
 
 import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.repository.room.PhotoDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

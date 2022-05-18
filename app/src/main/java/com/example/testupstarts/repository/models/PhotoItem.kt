@@ -1,4 +1,4 @@
-package com.example.testupstarts.repository
+package com.example.testupstarts.repository.models
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "cache")
+@Entity(tableName = "cache") //todo апридуммать норм имя
 data class PhotosItem(
     @PrimaryKey
     @ColumnInfo(name = "id")

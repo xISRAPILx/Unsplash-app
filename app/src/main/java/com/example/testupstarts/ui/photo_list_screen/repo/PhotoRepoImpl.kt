@@ -2,7 +2,7 @@ package com.example.testupstarts.ui.photo_list_screen.repo
 
 import com.example.testupstarts.BuildConfig
 import com.example.testupstarts.repository.network.ApiPhoto
-import com.example.testupstarts.repository.Photo
+import com.example.testupstarts.repository.models.Photo
 
 class PhotoRepoImpl(private val api: ApiPhoto) : PhotoRepository {
     override suspend fun getPhotos(): List<Photo> {

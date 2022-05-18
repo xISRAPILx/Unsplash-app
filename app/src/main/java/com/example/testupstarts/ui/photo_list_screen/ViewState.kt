@@ -1,6 +1,6 @@
 package com.example.testupstarts.ui
 
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 
 sealed class ViewState
 object ProgressState: ViewState()

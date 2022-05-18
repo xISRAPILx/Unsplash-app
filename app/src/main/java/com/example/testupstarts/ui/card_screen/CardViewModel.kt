@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

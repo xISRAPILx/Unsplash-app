@@ -1,4 +1,4 @@
-package com.example.testupstarts.repository
+package com.example.testupstarts.repository.models
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
@@ -21,9 +21,10 @@ data class Photo(
     @field:Json(name = "likes")
     val likes: Int,
 
+    //todo уточнить нужны или арннотации
     @field:Json(name = "liked_by_user")
     val liked_by_user: Boolean
-) : Parcelable
+) : Parcelable  //todo нехорошо
 
 @Parcelize
 data class User(
@@ -57,3 +58,4 @@ data class Urls(
     @field:Json(name = "small")
     var small: String,
 ) : Parcelable
+//todo разнесьти все классы по разным файлам
