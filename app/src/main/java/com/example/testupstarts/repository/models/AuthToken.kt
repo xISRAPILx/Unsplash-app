@@ -5,6 +5,7 @@ import com.squareup.moshi.Json
 data class AuthToken(
     @field:Json(name = "access_token")
     val access_token: String,
+    //todo поля приходящие с спервера должны быть наллабл
 
     @field:Json(name = "token_type")
     val token_type: String,

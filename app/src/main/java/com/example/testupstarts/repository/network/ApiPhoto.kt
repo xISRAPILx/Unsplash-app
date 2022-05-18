@@ -1,9 +1,15 @@
 package com.example.testupstarts.repository.network
 
-import com.example.testupstarts.repository.Photo
+import com.example.testupstarts.repository.models.Photo
+import com.example.testupstarts.repository.models.AuthToken
 import retrofit2.http.*
 
 interface ApiPhoto {
+    @POST("/oauth/token")
+    suspend fun getToken(
+        @Query("code") code: String
+    ) : AuthToken
+
     @GET("topics/{id_or_slug}/photos")
     suspend fun getPhotos(
         @Path("id_or_slug") id: String,

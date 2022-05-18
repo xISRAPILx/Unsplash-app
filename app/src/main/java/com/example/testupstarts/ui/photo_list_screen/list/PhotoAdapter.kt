@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testupstarts.ui.photo_list_screen.PhotosCallback
 import com.example.testupstarts.R
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_item.view.*
 

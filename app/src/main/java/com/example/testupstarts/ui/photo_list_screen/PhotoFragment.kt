@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.testupstarts.R
 import com.example.testupstarts.di.App
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.ui.ErrorState
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.ProgressState

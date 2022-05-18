@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
 import com.example.testupstarts.di.App
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso

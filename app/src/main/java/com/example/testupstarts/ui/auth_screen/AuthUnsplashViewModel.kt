@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AuthUnsplashViewModel(private val authInteractor: AuthInteractor): ViewModel() {
+class AuthUnsplashViewModel(private val authInteractor: AuthInteractor) : ViewModel() {
 
     val tokenResult = SingleLiveEvent<Unit>()
 
@@ -16,7 +16,7 @@ class AuthUnsplashViewModel(private val authInteractor: AuthInteractor): ViewMod
         loadToken(code)
     }
 
-    private fun loadToken(code:String) {
+    private fun loadToken(code: String) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 val token = authInteractor.getTokenFromNetwork(code)

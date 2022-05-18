@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.testupstarts.repository.PhotosItem
+import com.example.testupstarts.repository.models.PhotosItem
 
 @Database(entities = [PhotosItem::class], version = 1)
 abstract class PhotoDatabase : RoomDatabase() {
