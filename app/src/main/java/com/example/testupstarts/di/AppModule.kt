@@ -3,10 +3,12 @@ package com.example.testupstarts.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.repository.network.AuthInterceptor
 import com.example.testupstarts.repository.PrefsRepoImpl
 import com.example.testupstarts.repository.PrefsRepository
+import com.example.testupstarts.repository.TokenRepoImpl
+import com.example.testupstarts.repository.TokenRepository
 import com.example.testupstarts.repository.network.ApiPhoto
+import com.example.testupstarts.repository.network.AuthInterceptor
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.repository.room.PhotoDatabase
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
@@ -32,7 +34,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideInterceptor(authInteractor: AuthInteractor): AuthInterceptor {
+    fun provideAuthInterceptor(authInteractor: AuthInteractor): AuthInterceptor {
         return AuthInterceptor(authInteractor)
     }
 
@@ -62,12 +64,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideApiAuth(retrofit: Retrofit): ApiAuth {
-        return retrofit.create(ApiAuth::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideApiPhoto(retrofit: Retrofit): ApiPhoto {
         return retrofit.create(ApiPhoto::class.java)
     }
@@ -80,14 +76,20 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalRepository(sharedPreferences: SharedPreferences, apiAuth: ApiAuth): PrefsRepository {
-        return PrefsRepoImpl(sharedPreferences,apiAuth)
+    fun providePrefsRepository(sharedPreferences: SharedPreferences): PrefsRepository {
+        return PrefsRepoImpl(sharedPreferences)
     }
 
     @Provides
     @Singleton
     fun providePhotoRepository(apiPhoto: ApiPhoto): PhotoRepository {
         return PhotoRepoImpl(apiPhoto)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenRepository(apiPhoto: ApiPhoto): TokenRepository {
+        return TokenRepoImpl(apiPhoto)
     }
 
     @Provides

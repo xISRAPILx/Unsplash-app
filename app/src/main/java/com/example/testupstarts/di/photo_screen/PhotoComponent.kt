@@ -14,7 +14,7 @@ interface PhotoComponent {
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun bindsInflater(inflater:LayoutInflater)
+        fun bindsInflater(inflater:LayoutInflater):Builder
 
         fun build(): PhotoComponent
     }

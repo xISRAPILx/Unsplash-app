@@ -5,7 +5,7 @@ import android.app.Application
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        appComponent =
+        appComponent = DaggerAppComponent.builder().bindsApplication(this).build()
     }
 
     companion object {

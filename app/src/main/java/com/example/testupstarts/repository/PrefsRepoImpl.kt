@@ -16,7 +16,7 @@ class PrefsRepoImpl(private val sharedPref: SharedPreferences) : PrefsRepository
         return !sharedPref.contains(TOKEN_PREFS)
     }
 
-    override fun getTokenFromPrefs(): String? {
+    override fun getToken(): String? {
         return sharedPref.getString(TOKEN_PREFS, null)
     }
 

@@ -1,13 +1,13 @@
 package com.example.testupstarts.ui.auth_screen
 
-import com.example.testupstarts.repository.TokenRepoImpl
 import com.example.testupstarts.repository.PrefsRepository
+import com.example.testupstarts.repository.TokenRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AuthInteractor(
     private val prefsRepo: PrefsRepository,
-    private val networkRepo: TokenRepoImpl
+    private val tokenRepo: TokenRepository
 ) {
     fun saveToken(token: String) {
         prefsRepo.saveToken(token)
@@ -18,11 +18,11 @@ class AuthInteractor(
     }
 
     fun getToken(): String? {
-        return prefsRepo.getTokenFromPrefs()
+        return prefsRepo.getToken()
     }
 
     suspend fun getTokenFromNetwork(code: String) = withContext(Dispatchers.IO) {
-        val token = networkRepo.getToken(code)
+        val token = tokenRepo.getToken(code)
         token
     }
 
