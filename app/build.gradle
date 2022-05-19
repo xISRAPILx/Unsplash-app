@@ -45,6 +45,13 @@ android {
         }
     }
 
+    //временная мера для исправления ВМПровайдера из-за новой версии Lifecycle
+    kotlinOptions{
+        freeCompilerArgs += [
+                "-Xjvm-default=all",
+        ]
+    }
+
     buildFeatures {
         viewBinding true
     }
@@ -79,8 +86,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:2.4.0"
 
     //Jetpack
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-beta01"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-beta01"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-rc01"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-rc01"
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'

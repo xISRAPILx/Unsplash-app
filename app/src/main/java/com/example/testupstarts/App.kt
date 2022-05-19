@@ -1,6 +1,8 @@
-package com.example.testupstarts.di
+package com.example.testupstarts
 
 import android.app.Application
+import com.example.testupstarts.di.AppComponent
+import com.example.testupstarts.di.DaggerAppComponent
 
 class App : Application() {
     override fun onCreate() {
