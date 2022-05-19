@@ -13,7 +13,7 @@ interface CardComponent {
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun bindInflater(inflater: LayoutInflater)
+        fun bindInflater(inflater: LayoutInflater): Builder
 
         fun build(): CardComponent
     }

@@ -50,7 +50,7 @@ class PhotoFragment() : Fragment() {
         rv_catalog?.layoutManager = GridLayoutManager(requireContext(), 2)
         rv_catalog?.setHasFixedSize(true)
         viewModel.onViewCreated()
-        viewModel.tokenFlag.observe(viewLifecycleOwner, Observer { tokenFlag ->
+        viewModel.tokenFlag.observe(viewLifecycleOwner, { tokenFlag ->
             flag = tokenFlag
         })
         photosAdapter = PhotoAdapter(

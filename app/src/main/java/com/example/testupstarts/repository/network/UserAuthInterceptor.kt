@@ -4,7 +4,7 @@ import com.example.testupstarts.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AppAuthInterceptor: Interceptor {
+class UserAuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val url = originalRequest.url.newBuilder()
