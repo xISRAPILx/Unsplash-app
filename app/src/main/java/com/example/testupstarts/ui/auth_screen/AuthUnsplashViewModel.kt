@@ -6,8 +6,10 @@ import com.example.testupstarts.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AuthUnsplashViewModel(private val authInteractor: AuthInteractor) : ViewModel() {
+class AuthUnsplashViewModel @Inject constructor(private val authInteractor: AuthInteractor) :
+    ViewModel() {
 
     val tokenResult = SingleLiveEvent<Unit>()
 

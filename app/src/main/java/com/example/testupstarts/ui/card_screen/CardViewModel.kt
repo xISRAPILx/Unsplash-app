@@ -11,8 +11,9 @@ import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CardViewModel(private val interactor: PhotoInteractor) : ViewModel() {
+class CardViewModel @Inject constructor(private val interactor: PhotoInteractor) : ViewModel() {
 
     private var id: String? = null
     val snackbar: SingleLiveEvent<Int> = SingleLiveEvent()

@@ -16,8 +16,9 @@ import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PhotoViewModel(
+class PhotoViewModel @Inject constructor(
     private val authInteractor: AuthInteractor,
     private val photoInteractor: PhotoInteractor
 ) : ViewModel() {

@@ -5,18 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
-import com.example.testupstarts.di.App
+import com.example.testupstarts.App
+import com.example.testupstarts.databinding.FragmentCardBinding
+import com.example.testupstarts.databinding.WebviewLoginBinding
 import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.ui.auth_screen.AuthUnsplashViewModel
+import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
 import com.example.testupstarts.ui.main_screen.MainActivity
+import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_card.*
+import javax.inject.Inject
 
 class CardFragment : Fragment() {
 
-    private lateinit var viewModel: CardViewModel
+    @Inject
+    private lateinit var factory: CardViewModelFactory.Factory
+    private val viewModel by viewModels<CardViewModel> {
+        factory.create()
+    }
+    private var _binding: FragmentCardBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val PHOTO_ITEM = "photoItem"
@@ -40,16 +53,13 @@ class CardFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_card, container, false)
+    ): View {
+        _binding = FragmentCardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            App.instance.getAppContainer().getCardVmProvider()
-        ).get(CardViewModel::class.java)
         photos = arguments?.getParcelable(PHOTO_ITEM)
         flag = arguments?.getBoolean(FLAG_GUEST)
     }
@@ -60,28 +70,33 @@ class CardFragment : Fragment() {
             viewModel.onViewCreated(it.id, it.favorite)
             Picasso.get()
                 .load(it.imageUrlRegular)
-                .into(img_card)
-            card_like.text =
+                .into(binding.imgCard)
+            binding.cardLike.text =
                 context?.getString(R.string.likes, it.likes)
-            card_author_username.text =
+            binding.cardAuthorUsername.text =
                 context?.getString(R.string.author_username, it.authorUserName)
-            card_author_insta.text =
+            binding.cardAuthorInsta.text =
                 context?.getString(R.string.author_insta_username, it.instagramUsername)
             if (flag == true) {
-                card_fav.visibility = View.GONE
+                binding.cardFav.visibility = View.GONE
             } else {
-                card_fav.visibility = View.VISIBLE
+                binding.cardFav.visibility = View.VISIBLE
             }
-            viewModel.snackbar.observe(viewLifecycleOwner, {
+            viewModel.snackbar.observe(viewLifecycleOwner) {
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
-            })
-            viewModel.favorite.observe(viewLifecycleOwner, { card_fav.isChecked = it })
-            card_fav.setOnClickListener { view ->
-                viewModel.onFavClicked(card_fav.isChecked, photos)
+            }
+            viewModel.favorite.observe(viewLifecycleOwner) { binding.cardFav.isChecked = it }
+            card_fav.setOnClickListener {
+                viewModel.onFavClicked(binding.cardFav.isChecked, photos)
             }
         }
-        btn_back.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             (activity as? MainActivity)?.goBack()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

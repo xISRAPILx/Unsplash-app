@@ -8,41 +8,51 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
-import com.example.testupstarts.di.App
+import com.example.testupstarts.App
+import com.example.testupstarts.databinding.WebviewLoginBinding
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
 import kotlinx.android.synthetic.main.webview_login.*
+import javax.inject.Inject
 
 class AuthUnsplashFragment : Fragment() {
 
-    private lateinit var viewModel: AuthUnsplashViewModel
+    @Inject
+    private lateinit var factory: AuthViewModelFactory.Factory
+    private val viewModel by viewModels<AuthUnsplashViewModel> {
+        factory.create()
+    }
     private val fragmentPhoto = PhotoFragment()
+    private var _binding: WebviewLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            App.instance.getAppContainer().getAuthUnsplashVmProvider()
-        )[AuthUnsplashViewModel::class.java]
+        injectDependencies()
+    }
+
+    private fun injectDependencies() {
+        App.appComponent.authComponentBuilder().bindInflater(layoutInflater).build().inject(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.webview_login, container, false)
+    ): View {
+        _binding = WebviewLoginBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.tokenResult.observe(viewLifecycleOwner, {
+        viewModel.tokenResult.observe(viewLifecycleOwner) {
             (activity as? MainActivity)?.startRootFragment(fragmentPhoto)
-        })
+        }
 
         webview_auth.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -52,6 +62,11 @@ class AuthUnsplashFragment : Fragment() {
             }
         }
         webview_auth.loadUrl(AUTHORIZE_URL)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
