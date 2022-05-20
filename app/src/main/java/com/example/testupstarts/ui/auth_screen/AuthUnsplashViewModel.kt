@@ -23,7 +23,7 @@ class AuthUnsplashViewModel @Inject constructor(private val authInteractor: Auth
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 val token = authInteractor.getTokenFromNetwork(code)
-                authInteractor.saveToken(token.access_token)
+                authInteractor.saveToken(token.accessToken)
                 tokenResult.call()
             }
         }

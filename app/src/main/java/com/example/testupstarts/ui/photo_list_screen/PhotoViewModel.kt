@@ -71,11 +71,11 @@ class PhotoViewModel @Inject constructor(
     fun onFavClicked(favorite: Boolean, photo: PhotosItem) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             if (favorite) {
-                photoInteractor.likeAPhoto(photo.id)
+                photoInteractor.likePhoto(photo.id)
                 photoInteractor.updatePhoto(photo.id, favorite)
                 snackbar.postValue(R.string.snackbar_add_text)
             } else {
-                photoInteractor.unlikeAPhoto(photo.id)
+                photoInteractor.unlikePhoto(photo.id)
                 photoInteractor.updatePhoto(photo.id, favorite)
                 snackbar.postValue(R.string.snackbar_delete_text)
             }

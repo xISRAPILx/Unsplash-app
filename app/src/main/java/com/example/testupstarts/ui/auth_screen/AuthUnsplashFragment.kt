@@ -21,7 +21,7 @@ import javax.inject.Inject
 class AuthUnsplashFragment : Fragment() {
 
     @Inject
-    private lateinit var factory: AuthViewModelFactory.Factory
+    lateinit var factory: AuthViewModelFactory.Factory
     private val viewModel by viewModels<AuthUnsplashViewModel> {
         factory.create()
     }

@@ -25,7 +25,7 @@ import javax.inject.Inject
 class PhotoFragment() : Fragment() {
 
     @Inject
-    private lateinit var factory: PhotoViewModelFactory.Factory
+    lateinit var factory: PhotoViewModelFactory.Factory
     private val viewModel by viewModels<PhotoViewModel> {
         factory.create()
     }

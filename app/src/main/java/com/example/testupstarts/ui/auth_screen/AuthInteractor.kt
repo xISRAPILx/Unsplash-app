@@ -4,8 +4,9 @@ import com.example.testupstarts.repository.PrefsRepository
 import com.example.testupstarts.repository.TokenRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AuthInteractor(
+class AuthInteractor @Inject constructor(
     private val prefsRepo: PrefsRepository,
     private val tokenRepo: TokenRepository
 ) {
