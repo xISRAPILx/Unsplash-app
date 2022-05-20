@@ -30,13 +30,13 @@ class CardViewModel @Inject constructor(private val interactor: PhotoInteractor)
                 id?.let {
                     if (favorite) {
                         if (photo != null) {
-                            interactor.likeAPhoto(it)
+                            interactor.likePhoto(it)
                             interactor.updatePhoto(it, favorite)
                         }
                         snackbar.postValue(R.string.snackbar_add_text)
                     } else {
                         if (photo != null) {
-                            interactor.unlikeAPhoto(it)
+                            interactor.unlikePhoto(it)
                             interactor.updatePhoto(it, favorite)
                         }
                         snackbar.postValue(R.string.snackbar_delete_text)

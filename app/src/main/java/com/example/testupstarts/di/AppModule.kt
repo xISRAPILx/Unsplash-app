@@ -3,6 +3,7 @@ package com.example.testupstarts.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.testupstarts.BuildConfig
+import com.example.testupstarts.BuildConfig.BASE_URL
 import com.example.testupstarts.repository.PrefsRepoImpl
 import com.example.testupstarts.repository.PrefsRepository
 import com.example.testupstarts.repository.TokenRepoImpl
@@ -19,6 +20,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -56,9 +58,9 @@ class AppModule {
     @Singleton
     fun provideRetrofitService(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

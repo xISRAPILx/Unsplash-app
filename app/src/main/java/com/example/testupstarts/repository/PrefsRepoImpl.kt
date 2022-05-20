@@ -1,8 +1,9 @@
 package com.example.testupstarts.repository
 
 import android.content.SharedPreferences
+import javax.inject.Inject
 
-class PrefsRepoImpl(private val sharedPref: SharedPreferences) : PrefsRepository {
+class PrefsRepoImpl @Inject constructor(private val sharedPref: SharedPreferences) : PrefsRepository {
 
     override fun saveToken(token: String) {
         sharedPref.edit().putString(TOKEN_PREFS, token).apply()

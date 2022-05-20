@@ -17,13 +17,13 @@ data class PhotosItem(
     val desc: String? = null,
 
     @ColumnInfo(name = "imageUrlRegular")
-    val imageUrlRegular: String,
+    val imageUrlRegular: String? = null,
 
     @ColumnInfo(name = "imageUrlSmall")
-    val imageUrlSmall: String,
+    val imageUrlSmall: String? = null,
 
     @ColumnInfo(name = "authorUserName")
-    val authorUserName: String,
+    val authorUserName: String? = null,
 
     @ColumnInfo(name = "likes")
     val likes: Int? = null,
@@ -35,5 +35,5 @@ data class PhotosItem(
     val instagramUsername: String? = null,
 
     @ColumnInfo(name = "favorite")
-    var favorite: Boolean
+    var favorite: Boolean? = null
 ): Parcelable

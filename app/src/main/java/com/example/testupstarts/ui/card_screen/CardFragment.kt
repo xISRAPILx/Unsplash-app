@@ -24,7 +24,7 @@ import javax.inject.Inject
 class CardFragment : Fragment() {
 
     @Inject
-    private lateinit var factory: CardViewModelFactory.Factory
+    lateinit var factory: CardViewModelFactory.Factory
     private val viewModel by viewModels<CardViewModel> {
         factory.create()
     }
