@@ -43,7 +43,7 @@ class PhotoInteractor @Inject constructor(
         cache
     }
 
-    suspend fun clearAndAddToCache(photoList: List<PhotosItem>) {
+    suspend fun clearAndAddToCache(photoList: List<PhotosItem?>) {
         photoDao.clearAndAdd(photoList)
     }
 
