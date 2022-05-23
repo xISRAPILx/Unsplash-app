@@ -10,13 +10,13 @@ import com.example.testupstarts.repository.models.PhotosItem
 interface PhotoDao {
 
     @Insert
-    suspend fun addToCache(photoList: List<PhotosItem>)
+    suspend fun addToCache(photoList: List<PhotosItem?>)
 
     @Query("DELETE FROM cache")
     suspend fun deleteAll()
 
     @Transaction
-    suspend fun clearAndAdd(photoList: List<PhotosItem>){
+    suspend fun clearAndAdd(photoList: List<PhotosItem?>){
         deleteAll()
         addToCache(photoList)
     }
