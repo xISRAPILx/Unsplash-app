@@ -9,13 +9,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.example.testupstarts.R
 import com.example.testupstarts.App
 import com.example.testupstarts.databinding.WebviewLoginBinding
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
-import kotlinx.android.synthetic.main.webview_login.*
 import javax.inject.Inject
 
 class AuthUnsplashFragment : Fragment() {
@@ -54,14 +51,16 @@ class AuthUnsplashFragment : Fragment() {
             (activity as? MainActivity)?.startRootFragment(fragmentPhoto)
         }
 
-        webview_auth.webViewClient = object : WebViewClient() {
+        binding.webviewAuth.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                val uri: Uri = Uri.parse(url)
+                val uri = Uri.parse(url)
                 val code = uri.getQueryParameter(QUERY)
-                if (code != null) { viewModel.onAuthCodeExtracted(code) }
+                code?.let {
+                    viewModel.onAuthCodeExtracted(it)
+                }
             }
         }
-        webview_auth.loadUrl(AUTHORIZE_URL)
+        binding.webviewAuth.loadUrl(AUTHORIZE_URL)
     }
 
     override fun onDestroyView() {

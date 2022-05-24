@@ -16,12 +16,12 @@
         android:text="Unsplash"
         android:layout_marginBottom="20dp"
         android:gravity="top|center_vertical"/>
-    
+
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:id="@+id/button_login"
-        android:text="Log In"
+        android:text="@string/login"
         android:textColor="@android:color/white"
         android:background="@color/black"
         android:layout_marginBottom="20dp"/>
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_guest"
-        android:text="Continue as guest"
+        android:text="@string/continue_as_guest"
         android:layout_marginBottom="20dp"/>
     
     

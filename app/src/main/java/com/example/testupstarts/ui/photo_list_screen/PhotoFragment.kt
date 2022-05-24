@@ -29,15 +29,14 @@ class PhotoFragment() : Fragment() {
     private val viewModel by viewModels<PhotoViewModel> {
         factory.create()
     }
-    private lateinit var photosAdapter: PhotoAdapter
-    private var flag: Boolean = false
+    private var photosAdapter: PhotoAdapter? = null
     private var _binding: FragmentCatalogBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.onCreate()
         injectDependencies()
+        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -56,21 +55,20 @@ class PhotoFragment() : Fragment() {
         binding.rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvCatalog.setHasFixedSize(true)
         viewModel.onViewCreated()
-        viewModel.tokenFlag.observe(viewLifecycleOwner) { tokenFlag ->
-            flag = tokenFlag
-        }
-        photosAdapter = PhotoAdapter(
-            object : PhotosCallback {
-                override fun onItemClick(photo: PhotosItem) {
-                    openCard(photo, flag)
-                }
+        viewModel.tokenFlag.observe(viewLifecycleOwner) { flag ->
+            photosAdapter = PhotoAdapter(
+                object : PhotosCallback {
+                    override fun onItemClick(photo: PhotosItem) {
+                        openCard(photo, flag)
+                    }
 
-                override fun onLikeClick(like: Boolean, photo: PhotosItem) {
-                    viewModel.onFavClicked(like, photo)
-                }
-            },
-            flag
-        )
+                    override fun onLikeClick(like: Boolean, photo: PhotosItem) {
+                        viewModel.onFavClicked(like, photo)
+                    }
+                },
+                flag
+            )
+        }
         binding.rvCatalog.adapter = photosAdapter
         viewModel.snackbar.observe(viewLifecycleOwner) {
             Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
@@ -87,6 +85,7 @@ class PhotoFragment() : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        photosAdapter = null
     }
 
     private fun injectDependencies() {
@@ -94,13 +93,13 @@ class PhotoFragment() : Fragment() {
 
     }
 
-    private fun openCard(photo: PhotosItem, flag: Boolean) {
-        (activity as? MainActivity)?.startFragment(CardFragment.newInstance(photo, flag))
+    private fun openCard(photo: PhotosItem) {
+        (activity as? MainActivity)?.startFragment(CardFragment.newInstance(photo))
     }
 
     private fun showList(photos: List<PhotosItem>) {
-        photosAdapter.submitList(photos)
-        photosAdapter.setData(photos)
+        photosAdapter?.submitList(photos)
+        photosAdapter?.setData(photos)
         binding.tvFound.text = context?.getString(R.string.found_text, photos.size)
         binding.tvFound.visibility = View.VISIBLE
         binding.rvCatalog.visibility = View.VISIBLE

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "cache") //todo апридуммать норм имя
+@Entity(tableName = "photoCache") //todo апридуммать норм имя
 data class PhotosItem(
     @PrimaryKey
     @ColumnInfo(name = "id")

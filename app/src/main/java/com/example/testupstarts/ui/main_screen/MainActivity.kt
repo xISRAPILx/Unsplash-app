@@ -5,12 +5,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.testupstarts.R
 import com.example.testupstarts.App
+import com.example.testupstarts.R
 import com.example.testupstarts.databinding.ActivityMainBinding
-import com.example.testupstarts.databinding.FragmentCatalogBinding
 import com.example.testupstarts.ui.login_screen.LoginUnsplashFragment
 import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
 import javax.inject.Inject
@@ -19,8 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentPhoto = PhotoFragment()
     private val fragmentLoginUnsplash = LoginUnsplashFragment()
-    private val fragmentManager = supportFragmentManager
     private lateinit var binding: ActivityMainBinding
+    //todo обнулять биндинг
 
     @Inject
     lateinit var factory: MainActivityViewModelFactory.Factory
@@ -38,13 +35,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         viewModel.onCreate()
-        viewModel.loginResult.observe(this, Observer { result ->
-            if (result) {
+        viewModel.loginResult.observe(this) { hasLogin ->
+            if (!hasLogin) {
                 startRootFragment(fragmentLoginUnsplash)
             } else {
                 startRootFragment(fragmentPhoto)
             }
-        })
+        }
     }
 
     private fun injectDependencies() {
@@ -52,18 +49,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startRootFragment(fragment: Fragment) {
-        fragmentManager.popBackStack("auth", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        for (i in 0..fragmentManager.backStackEntryCount) {
-            fragmentManager.popBackStack()
+        supportFragmentManager.popBackStack("auth", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        //todo perenesti v companion stringu
+        for (i in 0 until supportFragmentManager.backStackEntryCount) {
+            supportFragmentManager.popBackStack()
         }
-        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction
             .replace(R.id.fragment_cont, fragment)
-            .commit()
+            .commit() //todo a gde addToBackStack?
     }
 
     fun startFragment(fragment: Fragment) {
-        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction
             .replace(R.id.fragment_cont, fragment)
             .addToBackStack("tag")
@@ -71,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goBack() {
-        fragmentManager.popBackStack()
+        supportFragmentManager.popBackStack()
     }
+    //todo sdelat navigation component
 }

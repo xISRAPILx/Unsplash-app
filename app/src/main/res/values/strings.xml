@@ -9,6 +9,6 @@
     <string name="photos">Категория: Природа</string>
     <string name="snackbar_add_text">Изображение добавлено в избранное</string>
     <string name="snackbar_delete_text">Изображение удалено из избранного</string>
-    <string name="login" >Log In</string>
-    <string name="progress_text">Пожалуйста подождите, фотографии грузятся</string>
+    <string name="login">Log In</string>
+    <string name="continue_as_guest">Continue as guest</string>
 </resources>
