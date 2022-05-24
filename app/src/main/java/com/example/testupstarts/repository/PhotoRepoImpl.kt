@@ -1,8 +1,8 @@
-package com.example.testupstarts.ui.photo_list_screen.repo
+package com.example.testupstarts.repository
 
 import com.example.testupstarts.BuildConfig
-import com.example.testupstarts.repository.network.ApiPhoto
 import com.example.testupstarts.repository.models.Photo
+import com.example.testupstarts.repository.network.ApiPhoto
 import javax.inject.Inject
 
 class PhotoRepoImpl @Inject constructor(private val api: ApiPhoto) : PhotoRepository {
@@ -10,12 +10,11 @@ class PhotoRepoImpl @Inject constructor(private val api: ApiPhoto) : PhotoReposi
         return api.getPhotos(BuildConfig.ID_OR_SLUG,1,30, PORTRAIT)
     }
 
-    override suspend fun likeAPhoto(idPhoto: String) {
-        api.likeAPhoto(idPhoto)
-    }
-
-    override suspend fun unlikeAPhoto(idPhoto: String) {
-        api.unlikeAPhoto(idPhoto)
+    override suspend fun setLike(idPhoto: String, like: Boolean) {
+        if(like)
+            api.likeAPhoto(idPhoto)
+        else
+            api.unlikeAPhoto(idPhoto)
     }
 
     companion object {

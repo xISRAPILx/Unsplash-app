@@ -1,6 +1,7 @@
 package com.example.testupstarts.ui.photo_list_screen
 
-import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
+import com.example.testupstarts.repository.PhotoRepository
+import com.example.testupstarts.repository.PrefsRepository
 import com.example.testupstarts.repository.models.PhotosItem
 import com.example.testupstarts.repository.room.PhotoDao
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,8 @@ import javax.inject.Inject
 
 class PhotoInteractor @Inject constructor(
     private val photoRepo: PhotoRepository,
-    private val photoDao: PhotoDao
+    private val photoDao: PhotoDao,
+    private val prefsRepo: PrefsRepository
 ) {
     // Network
     suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.IO) {
@@ -29,25 +31,21 @@ class PhotoInteractor @Inject constructor(
         }
     }
 
-    suspend fun likePhoto(idPhoto: String) {
-        photoRepo.likeAPhoto(idPhoto)
-    }
-
-    suspend fun unlikePhoto(idPhoto: String) {
-        photoRepo.unlikeAPhoto(idPhoto)
+    suspend fun updatePhoto(idPhoto: String, fav: Boolean) {
+        photoRepo.setLike(idPhoto, fav)
+        updatePhotoInDao(idPhoto, fav)
     }
 
     // DAO
-    suspend fun getPhotosFromCache() = withContext(Dispatchers.IO){
-        val cache = photoDao.getAllPhoto()
-        cache
-    }
+    suspend fun getPhotosFromCache() = photoDao.getAllPhoto()
 
     suspend fun clearAndAddToCache(photoList: List<PhotosItem?>) {
         photoDao.clearAndAdd(photoList)
     }
 
-    suspend fun updatePhoto(id: String, favorite: Boolean) {
+    private suspend fun updatePhotoInDao(id: String, favorite: Boolean) {
         photoDao.updatePhotoFromCache(id, favorite)
     }
+
+    fun isGuest() = prefsRepo.isGuest()
 }

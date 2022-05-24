@@ -5,7 +5,7 @@ import com.example.testupstarts.repository.TokenRepository
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
-import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
+import com.example.testupstarts.repository.PhotoRepository
 import dagger.Module
 import dagger.Provides
 

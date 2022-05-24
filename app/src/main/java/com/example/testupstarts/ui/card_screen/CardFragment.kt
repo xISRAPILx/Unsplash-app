@@ -16,12 +16,13 @@ import com.example.testupstarts.ui.auth_screen.AuthUnsplashViewModel
 import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
+import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_card.*
 import javax.inject.Inject
 
-class CardFragment : Fragment() {
+class CardFragment @Inject constructor(private val interactor: PhotoInteractor) : Fragment() {
 
     @Inject
     lateinit var factory: CardViewModelFactory.Factory
@@ -33,12 +34,10 @@ class CardFragment : Fragment() {
 
     companion object {
         const val PHOTO_ITEM = "photoItem"
-        const val FLAG_GUEST = "guestFlag"
 
-        fun newInstance(photo: PhotosItem, flag: Boolean): CardFragment {
+        fun newInstance(photo: PhotosItem): CardFragment {
             val bundle = Bundle().apply {
                 putParcelable(PHOTO_ITEM, photo)
-                putBoolean(FLAG_GUEST, flag)
             }
             return CardFragment().apply {
                 arguments = bundle
@@ -61,13 +60,12 @@ class CardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photos = arguments?.getParcelable(PHOTO_ITEM)
-        flag = arguments?.getBoolean(FLAG_GUEST)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         photos?.let {
-            viewModel.onViewCreated(it.id, it.favorite)
+            it.favorite?.let { it1 -> viewModel.onViewCreated(it.id, it1) }
             Picasso.get()
                 .load(it.imageUrlRegular)
                 .into(binding.imgCard)
@@ -77,7 +75,7 @@ class CardFragment : Fragment() {
                 context?.getString(R.string.author_username, it.authorUserName)
             binding.cardAuthorInsta.text =
                 context?.getString(R.string.author_insta_username, it.instagramUsername)
-            if (flag == true) {
+            if (interactor. == true) {
                 binding.cardFav.visibility = View.GONE
             } else {
                 binding.cardFav.visibility = View.VISIBLE
@@ -86,7 +84,7 @@ class CardFragment : Fragment() {
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             }
             viewModel.favorite.observe(viewLifecycleOwner) { binding.cardFav.isChecked = it }
-            card_fav.setOnClickListener {
+            binding.cardFav.setOnClickListener {
                 viewModel.onFavClicked(binding.cardFav.isChecked, photos)
             }
         }

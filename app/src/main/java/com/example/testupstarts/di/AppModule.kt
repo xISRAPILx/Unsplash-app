@@ -13,15 +13,14 @@ import com.example.testupstarts.repository.network.AuthInterceptor
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.repository.room.PhotoDatabase
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
-import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepoImpl
-import com.example.testupstarts.ui.photo_list_screen.repo.PhotoRepository
+import com.example.testupstarts.repository.PhotoRepoImpl
+import com.example.testupstarts.repository.PhotoRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
