@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class CardViewModel @Inject constructor(private val interactor: PhotoInteractor)
         mutableFavorite.postValue(favorite)
     }
 
-    fun onFavClicked(favorite: Boolean, photo: PhotosItem?) = viewModelScope.launch {
+    fun onFavClicked(favorite: Boolean, photo: PhotoItem?) = viewModelScope.launch {
         id?.let {
             interactor.updatePhoto(it, favorite)
             if (favorite)
