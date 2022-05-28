@@ -7,23 +7,16 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
-import com.example.testupstarts.App
 import com.example.testupstarts.databinding.FragmentCardBinding
-import com.example.testupstarts.databinding.WebviewLoginBinding
-import com.example.testupstarts.repository.models.PhotosItem
-import com.example.testupstarts.ui.auth_screen.AuthUnsplashViewModel
-import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.main_screen.MainActivity
-import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
 import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_card.*
 import javax.inject.Inject
 
-class CardFragment () : Fragment() {
+class CardFragment() : Fragment() {
 
     @Inject
     lateinit var factory: CardViewModelFactory.Factory
@@ -36,7 +29,7 @@ class CardFragment () : Fragment() {
     companion object {
         const val PHOTO_ITEM = "photoItem"
 
-        fun newInstance(photo: PhotosItem): CardFragment {
+        fun newInstance(photo: PhotoItem): CardFragment {
             val bundle = Bundle().apply {
                 putParcelable(PHOTO_ITEM, photo)
             }
@@ -46,7 +39,8 @@ class CardFragment () : Fragment() {
         }
     }
 
-    private var photos: PhotosItem? = null
+    private var photo: PhotoItem? = null
+    private var flag: Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,13 +53,12 @@ class CardFragment () : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        photos = arguments?.getParcelable(PHOTO_ITEM)
-        viewModel.onCreate()
+        photo = arguments?.getParcelable(PHOTO_ITEM)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photos?.let {
+        photo?.let {
             it.favorite?.let { it1 -> viewModel.onViewCreated(it.id, it1) }
             Picasso.get()
                 .load(it.imageUrlRegular)
@@ -86,7 +79,7 @@ class CardFragment () : Fragment() {
                 binding.cardFav.isChecked = isFavorite
             }
             binding.cardFav.setOnCheckedChangeListener { compoundButton, b ->
-                viewModel.onFavClicked(b,photos)
+                viewModel.onFavClicked(b,photo)
             }
         }
         binding.btnBack.setOnClickListener {

@@ -2,9 +2,10 @@ package com.example.testupstarts.ui.photo_list_screen
 
 import com.example.testupstarts.repository.PhotoRepository
 import com.example.testupstarts.repository.PrefsRepository
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.repository.room.PhotoDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -13,11 +14,24 @@ class PhotoInteractor @Inject constructor(
     private val photoDao: PhotoDao,
     private val prefsRepo: PrefsRepository
 ) {
+    val updatedPhotos: Flow<List<PhotoItem>> = photoDao.getAllPhoto()
+
+    suspend fun updatePhotoCache() = withContext(Dispatchers.IO) {
+        clearAndAddToCache(getPhotosFromUnsplash())
+    }
+
+    suspend fun getPhotos() = withContext(Dispatchers.IO) {
+        val photos = updatedPhotos.collect { data ->
+
+
+        }
+    }
+
     // Network
     suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.IO) {
         photoRepo.getPhotos().map {
             it.id?.let { it1 ->
-                PhotosItem(
+                PhotoItem(
                     it1,
                     it.desc,
                     it.imageUrls?.regular,
@@ -37,14 +51,12 @@ class PhotoInteractor @Inject constructor(
     }
 
     // DAO
-    suspend fun getPhotosFromCache() = photoDao.getAllPhoto()
-
-    suspend fun clearAndAddToCache(photoList: List<PhotosItem?>) {
+    private suspend fun clearAndAddToCache(photoList: List<PhotoItem?>) {
         photoDao.clearAndAdd(photoList)
     }
 
     private suspend fun updatePhotoInDao(id: String, favorite: Boolean) {
-        photoDao.updatePhotoFromCache(id, favorite)
+        photoDao.updatePhotoFromPhotoCache(id, favorite)
     }
 
     fun isGuest() = prefsRepo.isGuest()

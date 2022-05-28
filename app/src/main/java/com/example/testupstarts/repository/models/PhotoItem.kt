@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "photoCache") //todo апридуммать норм имя
-data class PhotosItem(
+@Entity(tableName = "photoCache")
+data class PhotoItem(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
