@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testupstarts.R
 import com.example.testupstarts.databinding.RvItemBinding
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.photo_list_screen.PhotosCallback
 import com.squareup.picasso.Picasso
 
 class PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
-    ListAdapter<PhotosItem, PhotoAdapter.PhotoViewHolder>(PhotoDiffUtil()) {
+    ListAdapter<PhotoItem, PhotoAdapter.PhotoViewHolder>(PhotoDiffUtil()) {
 
-    private val photos: MutableList<PhotosItem> = mutableListOf()
+    private val photos: MutableList<PhotoItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PhotoViewHolder(
         item = RvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -38,7 +38,7 @@ class PhotoAdapter(private val callback: PhotosCallback, private val flagResult:
             }
         }
 
-        fun bind(photo: PhotosItem) {
+        fun bind(photo: PhotoItem) {
             with(item) {
                 Picasso.get()
                     .load(photo.imageUrlSmall)
@@ -51,7 +51,7 @@ class PhotoAdapter(private val callback: PhotosCallback, private val flagResult:
         }
     }
 
-    fun setData(list: List<PhotosItem>) {
+    fun setData(list: List<PhotoItem>) {
         photos.clear()
         photos.addAll(list)
     }

@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.testupstarts.R
 import com.example.testupstarts.App
+import com.example.testupstarts.R
 import com.example.testupstarts.databinding.FragmentCatalogBinding
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.ErrorState
-import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.ProgressState
 import com.example.testupstarts.ui.ResultState
-import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
 import com.example.testupstarts.ui.card_screen.CardFragment
+import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.photo_list_screen.list.PhotoAdapter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_catalog.*
 import javax.inject.Inject
 
 class PhotoFragment() : Fragment() {
+
+    //todo Обновлять фотки по свайпу и пихать сначала все с кеша
 
     @Inject
     lateinit var factory: PhotoViewModelFactory.Factory
@@ -36,7 +36,6 @@ class PhotoFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
-        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -50,26 +49,32 @@ class PhotoFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //!
         (activity as? MainActivity)?.setSupportActionBar(binding.catalogToolbar)
-        binding.rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.rvCatalog.setHasFixedSize(true)
+        with(binding) {
+            rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
+            rvCatalog.setHasFixedSize(true)
+            rvCatalog.adapter = photosAdapter
+            swipe.isRefreshing = true
+            swipe.setOnRefreshListener {
+                viewModel.onPhotoListUpdated()
+            }
+        }
         viewModel.onViewCreated()
         viewModel.tokenFlag.observe(viewLifecycleOwner) { flag ->
             photosAdapter = PhotoAdapter(
                 object : PhotosCallback {
-                    override fun onItemClick(photo: PhotosItem) {
-                        openCard(photo, flag)
+                    override fun onItemClick(photo: PhotoItem) {
+                        openCard(photo)
                     }
 
-                    override fun onLikeClick(like: Boolean, photo: PhotosItem) {
+                    override fun onLikeClick(like: Boolean, photo: PhotoItem) {
                         viewModel.onFavClicked(like, photo)
                     }
                 },
                 flag
             )
         }
-        binding.rvCatalog.adapter = photosAdapter
+
         viewModel.snackbar.observe(viewLifecycleOwner) {
             Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
         }
@@ -80,6 +85,8 @@ class PhotoFragment() : Fragment() {
                 is ResultState -> showList(state.list)
             }
         }
+
+
     }
 
     override fun onDestroyView() {
@@ -93,35 +100,41 @@ class PhotoFragment() : Fragment() {
 
     }
 
-    private fun openCard(photo: PhotosItem) {
+    private fun openCard(photo: PhotoItem) {
         (activity as? MainActivity)?.startFragment(CardFragment.newInstance(photo))
     }
 
-    private fun showList(photos: List<PhotosItem>) {
+    private fun showList(photos: List<PhotoItem>) {
         photosAdapter?.submitList(photos)
         photosAdapter?.setData(photos)
-        binding.tvFound.text = context?.getString(R.string.found_text, photos.size)
-        binding.tvFound.visibility = View.VISIBLE
-        binding.rvCatalog.visibility = View.VISIBLE
-        binding.progressBarCatalog.visibility = View.GONE
-        binding.progressBarCatalog.hide()
-        binding.errorMessage.visibility = View.GONE
+        with(binding) {
+            tvFound.text = context?.getString(R.string.found_text, photos.size)
+            tvFound.visibility = View.VISIBLE
+            rvCatalog.visibility = View.VISIBLE
+            progressBarCatalog.visibility = View.GONE
+            progressBarCatalog.hide()
+            errorMessage.visibility = View.GONE
+        }
     }
 
     private fun showError() {
-        binding.tvFound.visibility = View.GONE
-        binding.rvCatalog.visibility = View.GONE
-        binding.progressBarCatalog.visibility = View.GONE
-        binding.progressBarCatalog.hide()
-        binding.errorMessage.visibility = View.VISIBLE
-        binding.btnTryAgain.setOnClickListener { viewModel.onTryAgainClicked() }
+        with(binding) {
+            tvFound.visibility = View.GONE
+            rvCatalog.visibility = View.GONE
+            progressBarCatalog.visibility = View.GONE
+            progressBarCatalog.hide()
+            errorMessage.visibility = View.VISIBLE
+            btnTryAgain.setOnClickListener { viewModel.onPhotoListUpdated() }
+        }
     }
 
     fun showProgress() {
-        binding.rvCatalog.visibility = View.GONE
-        binding.progressBarCatalog.visibility = View.VISIBLE
-        binding.progressBarCatalog.show()
-        binding.errorMessage.visibility = View.GONE
-        binding.tvFound.visibility = View.GONE
+        with(binding) {
+            rvCatalog.visibility = View.GONE
+            progressBarCatalog.visibility = View.VISIBLE
+            progressBarCatalog.show()
+            errorMessage.visibility = View.GONE
+            tvFound.visibility = View.GONE
+        }
     }
 }

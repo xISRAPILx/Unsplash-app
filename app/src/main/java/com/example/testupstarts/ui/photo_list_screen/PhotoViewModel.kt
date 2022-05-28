@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.ErrorState
 import com.example.testupstarts.ui.ProgressState
 import com.example.testupstarts.ui.ResultState
 import com.example.testupstarts.ui.ViewState
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,50 +30,39 @@ class PhotoViewModel @Inject constructor(
     val tokenFlag: LiveData<Boolean> get() = mutableTokenFlag
 
     //todo прикрутить котлин Flow
-    fun onCreate() {
+    init {
         loadList()
     }
 
     fun onViewCreated() {
         val flag = authInteractor.isGuest()
         mutableTokenFlag.postValue(flag)
+    }
+
+    fun onPhotoListUpdated() {
         loadList()
-        loadListFromCache()
     }
 
-    fun onTryAgainClicked() {
-        loadListFromCache()
-    }
-
-    private fun loadListFromCache() {
-        mutableState.postValue(ProgressState)
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    val cache = photoInteractor.getPhotosFromCache()
-                    mutableState.postValue(ResultState(cache))
-                } catch (e: Exception) {
-                    mutableState.postValue(ErrorState)
-                }
-            }
+    fun onFavClicked(favorite: Boolean, photo: PhotoItem) = viewModelScope.launch {
+        if (favorite) {
+            snackbar.postValue(R.string.snackbar_add_text)
+        } else {
+            snackbar.postValue(R.string.snackbar_delete_text)
         }
+        photoInteractor.updatePhoto(photo.id, favorite)
     }
 
     private fun loadList() {
+        mutableState.postValue(ProgressState)
         viewModelScope.launch {
-                val photoList = photoInteractor.getPhotosFromUnsplash()
-                photoInteractor.clearAndAddToCache(photoList)
-        }
-    }
-
-    fun onFavClicked(favorite: Boolean, photo: PhotosItem) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            if (favorite) {
-                snackbar.postValue(R.string.snackbar_add_text)
-            } else {
-                snackbar.postValue(R.string.snackbar_delete_text)
+            withContext(Dispatchers.IO) {
+                photoInteractor.updatedPhotos
+                    .catch { mutableState.postValue(ErrorState) }
+                    .collect { photos ->
+                        mutableState.postValue(ResultState(photos))
+                    }
             }
-            photoInteractor.updatePhoto(photo.id, favorite)
+            photoInteractor.updatePhotoCache()
         }
     }
 }
