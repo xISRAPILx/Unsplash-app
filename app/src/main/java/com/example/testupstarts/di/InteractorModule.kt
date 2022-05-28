@@ -23,8 +23,9 @@ class InteractorModule {
     @Provides
     fun providePhotoInteractor(
         photoRepository: PhotoRepository,
-        photoDao: PhotoDao
+        photoDao: PhotoDao,
+        prefsRepository: PrefsRepository
     ): PhotoInteractor {
-        return PhotoInteractor(photoRepository, photoDao)
+        return PhotoInteractor(photoRepository, photoDao, prefsRepository)
     }
 }

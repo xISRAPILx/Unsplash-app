@@ -26,7 +26,6 @@ class PhotoAdapter(private val callback: PhotosCallback, private val flagResult:
         }
     }
 
-    //todo сделать binding
     inner class PhotoViewHolder(private val item: RvItemBinding) : RecyclerView.ViewHolder(item.root) {
         init {
             item.root.setOnClickListener {

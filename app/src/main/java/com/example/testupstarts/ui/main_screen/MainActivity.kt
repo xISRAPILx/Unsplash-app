@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     private val fragmentPhoto = PhotoFragment()
     private val fragmentLoginUnsplash = LoginUnsplashFragment()
     private lateinit var binding: ActivityMainBinding
-    //todo обнулять биндинг
 
     @Inject
     lateinit var factory: MainActivityViewModelFactory.Factory
@@ -49,27 +48,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startRootFragment(fragment: Fragment) {
-        supportFragmentManager.popBackStack("auth", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        //todo perenesti v companion stringu
+        supportFragmentManager.popBackStack(AUTH_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         for (i in 0 until supportFragmentManager.backStackEntryCount) {
             supportFragmentManager.popBackStack()
         }
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction
-            .replace(R.id.fragment_cont, fragment)
-            .commit() //todo a gde addToBackStack?
+                .replace(R.id.fragment_cont, fragment)
+                .addToBackStack(fragment.javaClass.simpleName)
+                .commit()
     }
 
     fun startFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction
-            .replace(R.id.fragment_cont, fragment)
-            .addToBackStack("tag")
-            .commit()
+                .replace(R.id.fragment_cont, fragment)
+                .addToBackStack(fragment.javaClass.simpleName)
+                .commit()
     }
 
     fun goBack() {
         supportFragmentManager.popBackStack()
     }
     //todo sdelat navigation component
+
+    companion object {
+        const val AUTH_TAG = "auth"
+    }
 }

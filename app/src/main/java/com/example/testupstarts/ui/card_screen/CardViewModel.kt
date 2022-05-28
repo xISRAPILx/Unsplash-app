@@ -17,8 +17,11 @@ class CardViewModel @Inject constructor(private val interactor: PhotoInteractor)
     val snackbar: SingleLiveEvent<Int> = SingleLiveEvent()
     private val mutableFavorite: MutableLiveData<Boolean> = MutableLiveData()
     val favorite: LiveData<Boolean> get() = mutableFavorite
+    val guestValue: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    //todo прикрутить isGuest()
+    fun onCreate() {
+        guestValue.postValue(interactor.isGuest())
+    }
 
     fun onViewCreated(id: String, favorite: Boolean) {
         this.id = id
