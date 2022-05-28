@@ -59,7 +59,7 @@ class PhotoFragment() : Fragment() {
             photosAdapter = PhotoAdapter(
                 object : PhotosCallback {
                     override fun onItemClick(photo: PhotosItem) {
-                        openCard(photo, flag)
+                        openCard(photo)
                     }
 
                     override fun onLikeClick(like: Boolean, photo: PhotosItem) {

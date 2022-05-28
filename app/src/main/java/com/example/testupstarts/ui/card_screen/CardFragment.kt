@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +23,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_card.*
 import javax.inject.Inject
 
-class CardFragment @Inject constructor(private val interactor: PhotoInteractor) : Fragment() {
+class CardFragment () : Fragment() {
 
     @Inject
     lateinit var factory: CardViewModelFactory.Factory
@@ -46,7 +47,6 @@ class CardFragment @Inject constructor(private val interactor: PhotoInteractor) 
     }
 
     private var photos: PhotosItem? = null
-    private var flag: Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +60,7 @@ class CardFragment @Inject constructor(private val interactor: PhotoInteractor) 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photos = arguments?.getParcelable(PHOTO_ITEM)
+        viewModel.onCreate()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,17 +76,17 @@ class CardFragment @Inject constructor(private val interactor: PhotoInteractor) 
                 context?.getString(R.string.author_username, it.authorUserName)
             binding.cardAuthorInsta.text =
                 context?.getString(R.string.author_insta_username, it.instagramUsername)
-            if (interactor. == true) {
-                binding.cardFav.visibility = View.GONE
-            } else {
-                binding.cardFav.visibility = View.VISIBLE
+            viewModel.guestValue.observe(viewLifecycleOwner) { isGuest ->
+                binding.cardFav.isVisible = isGuest
             }
-            viewModel.snackbar.observe(viewLifecycleOwner) {
-                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
+            viewModel.snackbar.observe(viewLifecycleOwner) { n ->
+                Snackbar.make(view, n, Snackbar.LENGTH_SHORT).show()
             }
-            viewModel.favorite.observe(viewLifecycleOwner) { binding.cardFav.isChecked = it }
-            binding.cardFav.setOnClickListener {
-                viewModel.onFavClicked(binding.cardFav.isChecked, photos)
+            viewModel.favorite.observe(viewLifecycleOwner) { isFavorite ->
+                binding.cardFav.isChecked = isFavorite
+            }
+            binding.cardFav.setOnCheckedChangeListener { compoundButton, b ->
+                viewModel.onFavClicked(b,photos)
             }
         }
         binding.btnBack.setOnClickListener {
