@@ -9,4 +9,6 @@
     <string name="photos">Категория: Природа</string>
     <string name="snackbar_add_text">Изображение добавлено в избранное</string>
     <string name="snackbar_delete_text">Изображение удалено из избранного</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

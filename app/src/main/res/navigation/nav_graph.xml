@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/photoFragment">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.testupstarts.ui.MainActivity"
+        android:label="MainActivity" />
+    <fragment
+        android:id="@+id/authUnsplashFragment"
+        android:name="com.example.testupstarts.ui.AuthUnsplashFragment"
+        android:label="AuthUnsplashFragment" >
+        <action
+            android:id="@+id/action_authUnsplashFragment_to_photoFragment"
+            app:destination="@id/photoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardFragment"
+        android:name="com.example.testupstarts.ui.CardFragment"
+        android:label="CardFragment" />
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.example.testupstarts.ui.PhotoFragment"
+        android:label="PhotoFragment" >
+        <action
+            android:id="@+id/action_photoFragment_to_cardFragment"
+            app:destination="@id/cardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginUnsplashFragment"
+        android:name="com.example.testupstarts.ui.LoginUnsplashFragment"
+        android:label="LoginUnsplashFragment" >
+        <action
+            android:id="@+id/action_loginUnsplashFragment_to_authUnsplashFragment"
+            app:destination="@id/authUnsplashFragment" />
+    </fragment>
+</navigation>
