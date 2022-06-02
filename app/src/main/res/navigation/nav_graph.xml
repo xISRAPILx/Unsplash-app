@@ -5,13 +5,9 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/photoFragment">
 
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.testupstarts.ui.MainActivity"
-        android:label="MainActivity" />
     <fragment
         android:id="@+id/authUnsplashFragment"
-        android:name="com.example.testupstarts.ui.AuthUnsplashFragment"
+        android:name="com.example.unsplashapp.ui.AuthUnsplashFragment"
         android:label="AuthUnsplashFragment" >
         <action
             android:id="@+id/action_authUnsplashFragment_to_photoFragment"
@@ -19,11 +15,11 @@
     </fragment>
     <fragment
         android:id="@+id/cardFragment"
-        android:name="com.example.testupstarts.ui.CardFragment"
+        android:name="com.example.unsplashapp.ui.CardFragment"
         android:label="CardFragment" />
     <fragment
         android:id="@+id/photoFragment"
-        android:name="com.example.testupstarts.ui.PhotoFragment"
+        android:name="com.example.unsplashapp.ui.PhotoFragment"
         android:label="PhotoFragment" >
         <action
             android:id="@+id/action_photoFragment_to_cardFragment"
@@ -31,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginUnsplashFragment"
-        android:name="com.example.testupstarts.ui.LoginUnsplashFragment"
+        android:name="com.example.unsplashapp.ui.LoginUnsplashFragment"
         android:label="LoginUnsplashFragment" >
         <action
             android:id="@+id/action_loginUnsplashFragment_to_authUnsplashFragment"
