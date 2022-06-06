@@ -1,16 +1,17 @@
 package com.example.testupstarts.repository.network
 
+import com.example.testupstarts.repository.PrefsRepository
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(private val authInteractor: AuthInteractor): Interceptor {
+class AuthInterceptor(private val prefsRepo: PrefsRepository): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain
             .request()
-        if (authInteractor.getToken() != null) {
+        if (prefsRepo.getToken() != null) {
             val newRequest = original.newBuilder()
-                .addHeader(AUTHORIZATION_KEY,  String.format("Bearer %s", authInteractor.getToken()))
+                .addHeader(AUTHORIZATION_KEY,  String.format("Bearer %s", prefsRepo.getToken()))
                 .build()
             return chain.proceed(newRequest)
         }

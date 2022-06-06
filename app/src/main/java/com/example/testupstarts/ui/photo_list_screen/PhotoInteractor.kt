@@ -16,9 +16,7 @@ class PhotoInteractor @Inject constructor(
 ) {
     val updatedPhotos: Flow<List<PhotoItem>> = photoDao.getAllPhoto()
 
-    suspend fun updatePhotoCache() = withContext(Dispatchers.IO) {
-        clearAndAddToCache(getPhotosFromUnsplash())
-    }
+    suspend fun loadList() = clearAndAddToCache(getPhotosFromUnsplash())
 
     suspend fun getPhotos() = withContext(Dispatchers.IO) {
         val photos = updatedPhotos.collect { data ->

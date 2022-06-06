@@ -15,6 +15,7 @@ import com.example.testupstarts.repository.room.PhotoDatabase
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import com.example.testupstarts.repository.PhotoRepoImpl
 import com.example.testupstarts.repository.PhotoRepository
+import com.example.unsplashapp.BuildConfig.BASE_URL
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -35,8 +36,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(authInteractor: AuthInteractor): AuthInterceptor {
-        return AuthInterceptor(authInteractor)
+    fun provideAuthInterceptor(prefsRepo: PrefsRepository): AuthInterceptor {
+        return AuthInterceptor(prefsRepo)
     }
 
     @Provides
