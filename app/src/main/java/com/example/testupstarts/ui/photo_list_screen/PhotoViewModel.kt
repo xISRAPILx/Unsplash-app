@@ -1,5 +1,6 @@
 package com.example.testupstarts.ui.photo_list_screen
 
+import android.view.View
 import androidx.lifecycle.*
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import javax.inject.Inject
 
 class PhotoViewModel @Inject constructor(
@@ -21,16 +23,25 @@ class PhotoViewModel @Inject constructor(
 ) : ViewModel() {
 
     val snackbar: SingleLiveEvent<Int> = SingleLiveEvent()
-    private val mutableState: MutableLiveData<ViewState> = MutableLiveData()
-    val state: LiveData<ViewState> get() = mutableState
     private val mutableTokenFlag: MutableLiveData<Boolean> = MutableLiveData(false)
     val tokenFlag: LiveData<Boolean> get() = mutableTokenFlag
-    val postsLiveData:LiveData<ViewState> =  photoInteractor.updatedPhotos
-        .map {ResultState(it) }
+/*    val postsLiveData:LiveData<ViewState> =  photoInteractor.updatedPhotos
+        .map<List<PhotoItem>, ViewState> {ResultState(it) }
         .catch { emit(ErrorState)}
-        .asLiveData(viewModelScope.coroutineContext)
+        .asLiveData(viewModelScope.coroutineContext)*/
+
+    val photosLiveData = liveData {
+        emit(ProgressState)
+    try {
+        val photos = photoInteractor.updatedPhotos
+        emit(photos.collect { ResultState(it) })
+    } catch (e:Exception) {
+        emit(ErrorState)
+    }
+}
 
     fun onViewCreated() {
+        loadList()
         val flag = authInteractor.isGuest()
         mutableTokenFlag.postValue(flag)
     }
@@ -49,7 +60,6 @@ class PhotoViewModel @Inject constructor(
     }
 
     private fun loadList() {
-        mutableState.postValue(ProgressState)
         viewModelScope.launch {
             withContext(Dispatchers.Main){
                 photoInteractor.loadList()

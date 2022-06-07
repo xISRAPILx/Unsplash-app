@@ -10,16 +10,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.testupstarts.R
 import com.example.testupstarts.App
 import com.example.testupstarts.databinding.FragmentCatalogBinding
-import com.example.testupstarts.repository.models.PhotosItem
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.ErrorState
 import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.ProgressState
 import com.example.testupstarts.ui.ResultState
-import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
 import com.example.testupstarts.ui.card_screen.CardFragment
 import com.example.testupstarts.ui.photo_list_screen.list.PhotoAdapter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_catalog.*
 import javax.inject.Inject
 
 class PhotoFragment() : Fragment() {
@@ -36,7 +34,6 @@ class PhotoFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
-        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -51,18 +48,18 @@ class PhotoFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //!
-        (activity as? MainActivity)?.setSupportActionBar(binding.catalogToolbar)
+        (requireActivity() as? MainActivity)?.setSupportActionBar(binding.catalogToolbar)
         binding.rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvCatalog.setHasFixedSize(true)
         viewModel.onViewCreated()
         viewModel.tokenFlag.observe(viewLifecycleOwner) { flag ->
             photosAdapter = PhotoAdapter(
                 object : PhotosCallback {
-                    override fun onItemClick(photo: PhotosItem) {
+                    override fun onItemClick(photo: PhotoItem) {
                         openCard(photo)
                     }
 
-                    override fun onLikeClick(like: Boolean, photo: PhotosItem) {
+                    override fun onLikeClick(like: Boolean, photo: PhotoItem) {
                         viewModel.onFavClicked(like, photo)
                     }
                 },
@@ -73,7 +70,7 @@ class PhotoFragment() : Fragment() {
         viewModel.snackbar.observe(viewLifecycleOwner) {
             Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
         }
-        viewModel.state.observe(viewLifecycleOwner) { state ->
+        viewModel.photosLiveData.observe(viewLifecycleOwner) { state ->
             when (state) {
                 ProgressState -> showProgress()
                 ErrorState -> showError()
@@ -93,11 +90,11 @@ class PhotoFragment() : Fragment() {
 
     }
 
-    private fun openCard(photo: PhotosItem) {
-        (activity as? MainActivity)?.startFragment(CardFragment.newInstance(photo))
+    private fun openCard(photo: PhotoItem) {
+        (requireActivity() as? MainActivity)?.startFragment(CardFragment.newInstance(photo))
     }
 
-    private fun showList(photos: List<PhotosItem>) {
+    private fun showList(photos: List<PhotoItem>) {
         photosAdapter?.submitList(photos)
         photosAdapter?.setData(photos)
         binding.tvFound.text = context?.getString(R.string.found_text, photos.size)
@@ -114,7 +111,7 @@ class PhotoFragment() : Fragment() {
         binding.progressBarCatalog.visibility = View.GONE
         binding.progressBarCatalog.hide()
         binding.errorMessage.visibility = View.VISIBLE
-        binding.btnTryAgain.setOnClickListener { viewModel.onTryAgainClicked() }
+        binding.btnTryAgain.setOnClickListener { viewModel.onPhotoListUpdated() }
     }
 
     fun showProgress() {

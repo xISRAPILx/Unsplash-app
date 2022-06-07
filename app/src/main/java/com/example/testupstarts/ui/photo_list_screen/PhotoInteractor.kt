@@ -18,13 +18,6 @@ class PhotoInteractor @Inject constructor(
 
     suspend fun loadList() = clearAndAddToCache(getPhotosFromUnsplash())
 
-    suspend fun getPhotos() = withContext(Dispatchers.IO) {
-        val photos = updatedPhotos.collect { data ->
-
-
-        }
-    }
-
     // Network
     suspend fun getPhotosFromUnsplash() = withContext(Dispatchers.IO) {
         photoRepo.getPhotos().map {

@@ -7,20 +7,12 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.testupstarts.R
-import com.example.testupstarts.App
 import com.example.testupstarts.databinding.FragmentCardBinding
-import com.example.testupstarts.databinding.WebviewLoginBinding
-import com.example.testupstarts.repository.models.PhotosItem
-import com.example.testupstarts.ui.auth_screen.AuthUnsplashViewModel
-import com.example.testupstarts.ui.auth_screen.AuthViewModelFactory
+import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.main_screen.MainActivity
-import com.example.testupstarts.ui.photo_list_screen.PhotoFragment
-import com.example.testupstarts.ui.photo_list_screen.PhotoInteractor
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_card.*
 import javax.inject.Inject
 
 class CardFragment () : Fragment() {
@@ -36,7 +28,7 @@ class CardFragment () : Fragment() {
     companion object {
         const val PHOTO_ITEM = "photoItem"
 
-        fun newInstance(photo: PhotosItem): CardFragment {
+        fun newInstance(photo: PhotoItem): CardFragment {
             val bundle = Bundle().apply {
                 putParcelable(PHOTO_ITEM, photo)
             }
@@ -46,7 +38,7 @@ class CardFragment () : Fragment() {
         }
     }
 
-    private var photos: PhotosItem? = null
+    private var photos: PhotoItem? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,7 +82,7 @@ class CardFragment () : Fragment() {
             }
         }
         binding.btnBack.setOnClickListener {
-            (activity as? MainActivity)?.goBack()
+            (requireActivity() as? MainActivity)?.goBack()
         }
     }
 
