@@ -1,6 +1,7 @@
 package com.example.testupstarts.repository
 
 import android.content.SharedPreferences
+import android.util.Log
 import javax.inject.Inject
 
 class PrefsRepoImpl @Inject constructor(private val sharedPref: SharedPreferences) : PrefsRepository {
@@ -13,8 +14,9 @@ class PrefsRepoImpl @Inject constructor(private val sharedPref: SharedPreference
         sharedPref.edit().remove(TOKEN_PREFS).apply()
     }
 
-    override fun isGuest(): Boolean {
-        return !sharedPref.contains(TOKEN_PREFS)
+    override fun isLogged(): Boolean {
+        Log.d("isLogged", sharedPref.contains(TOKEN_PREFS).toString())
+        return sharedPref.contains(TOKEN_PREFS)
     }
 
     override fun getToken(): String? {

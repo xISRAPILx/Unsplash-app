@@ -50,5 +50,5 @@ class PhotoInteractor @Inject constructor(
         photoDao.updatePhotoFromPhotoCache(id, favorite)
     }
 
-    fun isGuest() = prefsRepo.isGuest()
+    fun isLogged() = prefsRepo.isLogged()
 }

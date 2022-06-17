@@ -21,6 +21,6 @@ class PhotoViewModelFactory @AssistedInject constructor(
     @AssistedFactory
     @MainScope
     interface Factory {
-        fun create(): MainActivityViewModelFactory
+        fun create(): PhotoViewModelFactory
     }
 }

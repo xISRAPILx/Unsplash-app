@@ -29,7 +29,7 @@ interface PhotoDao {
     suspend fun updatePhotoFromPhotoCache(id: String, favorite: Boolean)
 
     @Query("SELECT * FROM photoCache WHERE favorite = :favorite")
-    suspend fun getAllFavorite(favorite:Boolean): Flow<List<PhotoItem>>
+    fun getAllFavorite(favorite:Boolean): Flow<List<PhotoItem>>
 
     @Query("SELECT * FROM photoCache")
     fun getAllPhoto(): Flow<List<PhotoItem>>

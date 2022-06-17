@@ -68,8 +68,8 @@ class CardFragment () : Fragment() {
                 context?.getString(R.string.author_username, it.authorUserName)
             binding.cardAuthorInsta.text =
                 context?.getString(R.string.author_insta_username, it.instagramUsername)
-            viewModel.guestValue.observe(viewLifecycleOwner) { isGuest ->
-                binding.cardFav.isVisible = isGuest
+            viewModel.loggedUserValue.observe(viewLifecycleOwner) { isLogged ->
+                binding.cardFav.isVisible = isLogged
             }
             viewModel.snackbar.observe(viewLifecycleOwner) { n ->
                 Snackbar.make(view, n, Snackbar.LENGTH_SHORT).show()

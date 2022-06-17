@@ -1,5 +1,6 @@
 package com.example.testupstarts.repository.network
 
+import android.util.Log
 import com.example.testupstarts.repository.PrefsRepository
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import okhttp3.Interceptor
@@ -10,6 +11,7 @@ class AuthInterceptor(private val prefsRepo: PrefsRepository): Interceptor {
         val original = chain
             .request()
         if (prefsRepo.getToken() != null) {
+            Log.d("getToken", prefsRepo.getToken().toString())
             val newRequest = original.newBuilder()
                 .addHeader(AUTHORIZATION_KEY,  String.format("Bearer %s", prefsRepo.getToken()))
                 .build()

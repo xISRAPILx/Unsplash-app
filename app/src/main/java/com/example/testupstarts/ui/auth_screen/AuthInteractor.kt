@@ -13,7 +13,7 @@ class AuthInteractor @Inject constructor(
     }
 
     fun isGuest(): Boolean {
-        return prefsRepo.isGuest()
+        return prefsRepo.isLogged()
     }
 
     fun getToken(): String? {
