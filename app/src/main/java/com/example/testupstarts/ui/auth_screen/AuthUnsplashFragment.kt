@@ -55,6 +55,7 @@ class AuthUnsplashFragment : Fragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 val uri = Uri.parse(url)
                 val code = uri.getQueryParameter(QUERY)
+
                 code?.let {
                     viewModel.onAuthCodeExtracted(it)
                 }

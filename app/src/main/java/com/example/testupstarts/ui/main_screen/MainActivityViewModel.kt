@@ -12,6 +12,6 @@ class MainActivityViewModel @Inject constructor(private val authInteractor: Auth
     val loginResult : LiveData<Boolean> get() = mutableLoginResult
 
     fun onCreate() {
-        mutableLoginResult.postValue(authInteractor.isGuest())
+        mutableLoginResult.postValue(authInteractor.isLogged())
     }
 }

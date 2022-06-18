@@ -51,6 +51,7 @@ class PhotoFragment() : Fragment() {
         (requireActivity() as? MainActivity)?.setSupportActionBar(binding.catalogToolbar)
         binding.rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvCatalog.setHasFixedSize(true)
+        binding.rvCatalog.adapter = photosAdapter
         viewModel.onViewCreated()
         viewModel.tokenFlag.observe(viewLifecycleOwner) { flag ->
             photosAdapter = PhotoAdapter(
@@ -66,7 +67,7 @@ class PhotoFragment() : Fragment() {
                 flag
             )
         }
-        binding.rvCatalog.adapter = photosAdapter
+
         viewModel.snackbar.observe(viewLifecycleOwner) {
             Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
         }

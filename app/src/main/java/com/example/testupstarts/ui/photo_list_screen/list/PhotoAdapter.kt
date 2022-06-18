@@ -11,7 +11,8 @@ import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.photo_list_screen.PhotosCallback
 import com.squareup.picasso.Picasso
 
-class PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
+class
+PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
     ListAdapter<PhotoItem, PhotoAdapter.PhotoViewHolder>(PhotoDiffUtil()) {
 
     private val photos: MutableList<PhotoItem> = mutableListOf()

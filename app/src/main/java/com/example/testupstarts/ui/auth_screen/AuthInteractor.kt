@@ -12,7 +12,7 @@ class AuthInteractor @Inject constructor(
         prefsRepo.saveToken(token)
     }
 
-    fun isGuest(): Boolean {
+    fun isLogged(): Boolean {
         return prefsRepo.isLogged()
     }
 

@@ -7,6 +7,7 @@ import com.example.testupstarts.BuildConfig.BASE_URL
 import com.example.testupstarts.repository.*
 import com.example.testupstarts.repository.network.ApiPhoto
 import com.example.testupstarts.repository.network.AuthInterceptor
+import com.example.testupstarts.repository.network.Interceptor
 import com.example.testupstarts.repository.room.PhotoDao
 import com.example.testupstarts.repository.room.PhotoDatabase
 import dagger.Module
@@ -29,6 +30,12 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideInterceptor():Interceptor {
+        return Interceptor()
+    }
+
+    @Provides
+    @Singleton
     fun provideAuthInterceptor(prefsRepo: PrefsRepository): AuthInterceptor {
         return AuthInterceptor(prefsRepo)
     }
@@ -37,11 +44,13 @@ class AppModule {
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        interceptor: AuthInterceptor
+        interceptor: Interceptor,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(interceptor)
+            .addInterceptor(authInterceptor)
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(40, TimeUnit.SECONDS)
             .build()

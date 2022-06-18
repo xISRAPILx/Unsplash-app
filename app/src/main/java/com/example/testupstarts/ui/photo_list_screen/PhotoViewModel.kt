@@ -1,6 +1,5 @@
 package com.example.testupstarts.ui.photo_list_screen
 
-import android.view.View
 import androidx.lifecycle.*
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
@@ -8,10 +7,8 @@ import com.example.testupstarts.repository.models.PhotoItem
 import com.example.testupstarts.ui.ErrorState
 import com.example.testupstarts.ui.ProgressState
 import com.example.testupstarts.ui.ResultState
-import com.example.testupstarts.ui.ViewState
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -34,7 +31,9 @@ class PhotoViewModel @Inject constructor(
         emit(ProgressState)
     try {
         val photos = photoInteractor.updatedPhotos
-        emit(photos.collect { ResultState(it) })
+        photos.collect{
+            emit(ResultState(it))
+        }
     } catch (e:Exception) {
         emit(ErrorState)
     }
@@ -42,7 +41,7 @@ class PhotoViewModel @Inject constructor(
 
     fun onViewCreated() {
         loadList()
-        val flag = authInteractor.isGuest()
+        val flag = authInteractor.isLogged()
         mutableTokenFlag.postValue(flag)
     }
 
