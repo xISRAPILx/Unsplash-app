@@ -51,23 +51,19 @@ class PhotoFragment() : Fragment() {
         (requireActivity() as? MainActivity)?.setSupportActionBar(binding.catalogToolbar)
         binding.rvCatalog.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvCatalog.setHasFixedSize(true)
-        binding.rvCatalog.adapter = photosAdapter
         viewModel.onViewCreated()
-        viewModel.tokenFlag.observe(viewLifecycleOwner) { flag ->
-            photosAdapter = PhotoAdapter(
-                object : PhotosCallback {
-                    override fun onItemClick(photo: PhotoItem) {
-                        openCard(photo)
-                    }
+        photosAdapter = PhotoAdapter(
+            object : PhotosCallback {
+                override fun onItemClick(photo: PhotoItem) {
+                    openCard(photo)
+                }
 
-                    override fun onLikeClick(like: Boolean, photo: PhotoItem) {
-                        viewModel.onFavClicked(like, photo)
-                    }
-                },
-                flag
-            )
-        }
-
+                override fun onLikeClick(like: Boolean, photo: PhotoItem) {
+                    viewModel.onFavClicked(like, photo)
+                }
+            }
+        )
+        binding.rvCatalog.adapter = photosAdapter
         viewModel.snackbar.observe(viewLifecycleOwner) {
             Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
         }
@@ -75,7 +71,13 @@ class PhotoFragment() : Fragment() {
             when (state) {
                 ProgressState -> showProgress()
                 ErrorState -> showError()
-                is ResultState -> showList(state.list)
+                is ResultState -> {
+                    photosAdapter.let {
+                        it?.setData(
+                            isLogged = state.photoUiState.isLogged)
+                    }
+                    showList(state.photoUiState.photos)
+                }
             }
         }
     }
@@ -97,7 +99,6 @@ class PhotoFragment() : Fragment() {
 
     private fun showList(photos: List<PhotoItem>) {
         photosAdapter?.submitList(photos)
-        photosAdapter?.setData(photos)
         binding.tvFound.text = context?.getString(R.string.found_text, photos.size)
         binding.tvFound.visibility = View.VISIBLE
         binding.rvCatalog.visibility = View.VISIBLE

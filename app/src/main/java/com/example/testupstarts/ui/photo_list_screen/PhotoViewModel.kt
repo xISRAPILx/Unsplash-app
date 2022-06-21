@@ -29,20 +29,22 @@ class PhotoViewModel @Inject constructor(
 
     val photosLiveData = liveData {
         emit(ProgressState)
-    try {
-        val photos = photoInteractor.updatedPhotos
-        photos.collect{
-            emit(ResultState(it))
+        try {
+            val photos = photoInteractor.updatedPhotos
+            val isLogged = authInteractor.isLogged()
+            photos.collect{
+                emit(PhotoUiState(
+                    photos = it,
+                    isLogged = isLogged
+                ))
+            }
+        } catch (e:Exception) {
+            emit(ErrorState)
         }
-    } catch (e:Exception) {
-        emit(ErrorState)
     }
-}
 
     fun onViewCreated() {
         loadList()
-        val flag = authInteractor.isLogged()
-        mutableTokenFlag.postValue(flag)
     }
 
     fun onPhotoListUpdated() {

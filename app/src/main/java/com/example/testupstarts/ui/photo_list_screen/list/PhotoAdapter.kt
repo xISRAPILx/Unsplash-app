@@ -12,10 +12,10 @@ import com.example.testupstarts.ui.photo_list_screen.PhotosCallback
 import com.squareup.picasso.Picasso
 
 class
-PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boolean) :
+PhotoAdapter(private val callback: PhotosCallback) :
     ListAdapter<PhotoItem, PhotoAdapter.PhotoViewHolder>(PhotoDiffUtil()) {
 
-    private val photos: MutableList<PhotoItem> = mutableListOf()
+    private var flagResult: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PhotoViewHolder(
         item = RvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,11 +30,11 @@ PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boole
     inner class PhotoViewHolder(private val item: RvItemBinding) : RecyclerView.ViewHolder(item.root) {
         init {
             item.root.setOnClickListener {
-                callback.onItemClick(photos[layoutPosition])
+                callback.onItemClick(this@PhotoAdapter.currentList[layoutPosition])
             }
             item.itemFavBtn.setOnCheckedChangeListener { compoundButton, b ->
-                photos[layoutPosition].favorite = b
-                callback.onLikeClick(b, photos[layoutPosition])
+                this@PhotoAdapter.currentList[layoutPosition].favorite = b
+                callback.onLikeClick(b, this@PhotoAdapter.currentList[layoutPosition])
             }
         }
 
@@ -51,8 +51,7 @@ PhotoAdapter(private val callback: PhotosCallback, private val flagResult: Boole
         }
     }
 
-    fun setData(list: List<PhotoItem>) {
-        photos.clear()
-        photos.addAll(list)
+    fun setData(isLogged: Boolean) {
+        flagResult = isLogged
     }
 }
