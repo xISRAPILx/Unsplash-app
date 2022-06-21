@@ -1,9 +1,14 @@
-package com.example.testupstarts.ui
+package com.example.testupstarts.ui.photo_list_screen
 
 import com.example.testupstarts.repository.models.PhotoItem
-import com.example.testupstarts.ui.photo_list_screen.PhotoUiState
 
 sealed class ViewState
-object ProgressState: ViewState()
+
+object ProgressState : ViewState()
+
 object ErrorState : ViewState()
-class ResultState(val photoUiState: PhotoUiState): ViewState()
+
+data class ResultState(
+    val photos: List<PhotoItem>,
+    val isLogged: Boolean
+) : ViewState()

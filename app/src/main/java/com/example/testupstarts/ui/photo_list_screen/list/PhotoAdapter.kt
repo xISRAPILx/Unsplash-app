@@ -15,7 +15,7 @@ class
 PhotoAdapter(private val callback: PhotosCallback) :
     ListAdapter<PhotoItem, PhotoAdapter.PhotoViewHolder>(PhotoDiffUtil()) {
 
-    private var flagResult: Boolean = false
+    private var flagShowLike: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PhotoViewHolder(
         item = RvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,7 +27,8 @@ PhotoAdapter(private val callback: PhotosCallback) :
         }
     }
 
-    inner class PhotoViewHolder(private val item: RvItemBinding) : RecyclerView.ViewHolder(item.root) {
+    inner class PhotoViewHolder(private val item: RvItemBinding) :
+        RecyclerView.ViewHolder(item.root) {
         init {
             item.root.setOnClickListener {
                 callback.onItemClick(this@PhotoAdapter.currentList[layoutPosition])
@@ -45,13 +46,16 @@ PhotoAdapter(private val callback: PhotosCallback) :
                     .into(imgItem)
                 author.text = photo.authorName
                 itemLikes.text = itemView.context.getString(R.string.likes, photo.likes)
-                itemFavBtn.isVisible = !flagResult
+                itemFavBtn.isVisible = flagShowLike
                 itemFavBtn.isChecked = photo.favorite == true
             }
         }
     }
 
-    fun setData(isLogged: Boolean) {
-        flagResult = isLogged
+    fun submitList(items: List<PhotoItem>, flashShowLike: Boolean) {
+//        val isLoggedInChanged = currentList.isNotEmpty() && flagResult != isLoggedIn
+
+        flagShowLike = flashShowLike
+        submitList(items)
     }
 }

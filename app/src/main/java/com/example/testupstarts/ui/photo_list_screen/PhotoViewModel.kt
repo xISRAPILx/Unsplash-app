@@ -4,9 +4,6 @@ import androidx.lifecycle.*
 import com.example.testupstarts.R
 import com.example.testupstarts.SingleLiveEvent
 import com.example.testupstarts.repository.models.PhotoItem
-import com.example.testupstarts.ui.ErrorState
-import com.example.testupstarts.ui.ProgressState
-import com.example.testupstarts.ui.ResultState
 import com.example.testupstarts.ui.auth_screen.AuthInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,18 +24,20 @@ class PhotoViewModel @Inject constructor(
         .catch { emit(ErrorState)}
         .asLiveData(viewModelScope.coroutineContext)*/
 
-    val photosLiveData = liveData {
+    val photosLiveData: LiveData<ViewState> = liveData {
         emit(ProgressState)
         try {
             val photos = photoInteractor.updatedPhotos
             val isLogged = authInteractor.isLogged()
-            photos.collect{
-                emit(PhotoUiState(
-                    photos = it,
-                    isLogged = isLogged
-                ))
+            photos.collect {
+                emit(
+                    ResultState(
+                        photos = it,
+                        isLogged = isLogged
+                    )
+                )
             }
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             emit(ErrorState)
         }
     }
@@ -62,7 +61,7 @@ class PhotoViewModel @Inject constructor(
 
     private fun loadList() {
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 photoInteractor.loadList()
             }
         }

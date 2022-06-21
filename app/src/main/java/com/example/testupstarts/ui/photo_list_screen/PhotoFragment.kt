@@ -7,20 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.testupstarts.R
 import com.example.testupstarts.App
+import com.example.testupstarts.R
 import com.example.testupstarts.databinding.FragmentCatalogBinding
 import com.example.testupstarts.repository.models.PhotoItem
-import com.example.testupstarts.ui.ErrorState
-import com.example.testupstarts.ui.main_screen.MainActivity
-import com.example.testupstarts.ui.ProgressState
-import com.example.testupstarts.ui.ResultState
 import com.example.testupstarts.ui.card_screen.CardFragment
+import com.example.testupstarts.ui.main_screen.MainActivity
 import com.example.testupstarts.ui.photo_list_screen.list.PhotoAdapter
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-class PhotoFragment() : Fragment() {
+class PhotoFragment : Fragment() {
 
     @Inject
     lateinit var factory: PhotoViewModelFactory.Factory
@@ -72,11 +69,7 @@ class PhotoFragment() : Fragment() {
                 ProgressState -> showProgress()
                 ErrorState -> showError()
                 is ResultState -> {
-                    photosAdapter.let {
-                        it?.setData(
-                            isLogged = state.photoUiState.isLogged)
-                    }
-                    showList(state.photoUiState.photos)
+                    showList(photos = state.photos, isLoggedIn = state.isLogged)
                 }
             }
         }
@@ -97,8 +90,9 @@ class PhotoFragment() : Fragment() {
         (requireActivity() as? MainActivity)?.startFragment(CardFragment.newInstance(photo))
     }
 
-    private fun showList(photos: List<PhotoItem>) {
-        photosAdapter?.submitList(photos)
+    private fun showList(photos: List<PhotoItem>, isLoggedIn: Boolean) {
+        photosAdapter?.submitList(photos, isLoggedIn)
+
         binding.tvFound.text = context?.getString(R.string.found_text, photos.size)
         binding.tvFound.visibility = View.VISIBLE
         binding.rvCatalog.visibility = View.VISIBLE
